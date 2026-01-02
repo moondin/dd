@@ -1,0 +1,1459 @@
+---
+source_txt: fullstack_samples/sim-main
+converted_utc: 2025-12-18T11:26:35Z
+part: 352
+parts_total: 933
+---
+
+# FULLSTACK CODE DATABASE SAMPLES sim-main
+
+## Verbatim Content (Part 352 of 933)
+
+````text
+================================================================================
+FULLSTACK SAMPLES CODE DATABASE (VERBATIM) - sim-main
+================================================================================
+Generated: December 18, 2025
+Source: fullstack_samples/sim-main
+================================================================================
+
+NOTES:
+- This output is verbatim because the source is user-owned.
+- Large/binary files may be skipped by size/binary detection limits.
+
+================================================================================
+
+---[FILE: base.tsx]---
+Location: sim-main/apps/sim/app/workspace/[workspaceId]/knowledge/[id]/base.tsx
+Signals: React, Next.js
+
+```typescript
+'use client'
+
+import { useCallback, useEffect, useState } from 'react'
+import { format } from 'date-fns'
+import {
+  AlertCircle,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  Circle,
+  CircleOff,
+  Loader2,
+  RotateCcw,
+  Search,
+  X,
+} from 'lucide-react'
+import { useParams, useRouter } from 'next/navigation'
+import {
+  Breadcrumb,
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Tooltip,
+  Trash,
+} from '@/components/emcn'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { SearchHighlight } from '@/components/ui/search-highlight'
+import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import type { DocumentSortField, SortOrder } from '@/lib/knowledge/documents/types'
+import { createLogger } from '@/lib/logs/console/logger'
+import {
+  ActionBar,
+  AddDocumentsModal,
+  BaseTagsModal,
+} from '@/app/workspace/[workspaceId]/knowledge/[id]/components'
+import { getDocumentIcon } from '@/app/workspace/[workspaceId]/knowledge/components'
+import { useUserPermissionsContext } from '@/app/workspace/[workspaceId]/providers/workspace-permissions-provider'
+import {
+  useKnowledgeBase,
+  useKnowledgeBaseDocuments,
+  useKnowledgeBasesList,
+} from '@/hooks/use-knowledge'
+import type { DocumentData } from '@/stores/knowledge/store'
+
+const logger = createLogger('KnowledgeBase')
+
+const DOCUMENTS_PER_PAGE = 50
+
+function DocumentTableRowSkeleton() {
+  return (
+    <TableRow className='hover:bg-transparent'>
+      <TableCell className='w-[28px] py-[8px] pr-0 pl-0'>
+        <div className='flex items-center justify-center'>
+          <Skeleton className='h-[14px] w-[14px] rounded-[2px]' />
+        </div>
+      </TableCell>
+      <TableCell className='w-[180px] max-w-[180px] px-[12px] py-[8px]'>
+        <div className='flex min-w-0 items-center gap-[8px]'>
+          <Skeleton className='h-6 w-5 flex-shrink-0 rounded-[2px]' />
+          <Skeleton className='h-[17px] w-[120px]' />
+        </div>
+      </TableCell>
+      <TableCell className='px-[12px] py-[8px]'>
+        <Skeleton className='h-[15px] w-[48px]' />
+      </TableCell>
+      <TableCell className='px-[12px] py-[8px]'>
+        <Skeleton className='h-[15px] w-[32px]' />
+      </TableCell>
+      <TableCell className='hidden px-[12px] py-[8px] lg:table-cell'>
+        <Skeleton className='h-[15px] w-[24px]' />
+      </TableCell>
+      <TableCell className='px-[12px] py-[8px]'>
+        <div className='flex flex-col justify-center'>
+          <div className='flex items-center font-medium text-[12px]'>
+            <Skeleton className='h-[15px] w-[50px]' />
+            <span className='mx-[6px] hidden text-[var(--text-muted)] xl:inline'>|</span>
+            <Skeleton className='hidden h-[15px] w-[70px] xl:inline-block' />
+          </div>
+          <Skeleton className='mt-[2px] h-[15px] w-[40px] lg:hidden' />
+        </div>
+      </TableCell>
+      <TableCell className='px-[12px] py-[8px]'>
+        <Skeleton className='h-[24px] w-[64px] rounded-md' />
+      </TableCell>
+      <TableCell className='py-[8px] pr-[4px] pl-[12px]'>
+        <div className='flex items-center gap-[4px]'>
+          <Skeleton className='h-[28px] w-[28px] rounded-[4px]' />
+          <Skeleton className='h-[28px] w-[28px] rounded-[4px]' />
+        </div>
+      </TableCell>
+    </TableRow>
+  )
+}
+
+function DocumentTableSkeleton({ rowCount = 5 }: { rowCount?: number }) {
+  return (
+    <Table className='min-w-[700px] table-fixed text-[13px]'>
+      <TableHeader>
+        <TableRow className='hover:bg-transparent'>
+          <TableHead className='w-[28px] py-[8px] pr-0 pl-0'>
+            <div className='flex items-center justify-center'>
+              <Skeleton className='h-[14px] w-[14px] rounded-[2px]' />
+            </div>
+          </TableHead>
+          <TableHead className='w-[180px] max-w-[180px] px-[12px] py-[8px] text-[12px] text-[var(--text-secondary)]'>
+            Name
+          </TableHead>
+          <TableHead className='w-[8%] px-[12px] py-[8px] text-[12px] text-[var(--text-secondary)]'>
+            Size
+          </TableHead>
+          <TableHead className='w-[8%] px-[12px] py-[8px] text-[12px] text-[var(--text-secondary)]'>
+            Tokens
+          </TableHead>
+          <TableHead className='hidden w-[8%] px-[12px] py-[8px] text-[12px] text-[var(--text-secondary)] lg:table-cell'>
+            Chunks
+          </TableHead>
+          <TableHead className='w-[16%] px-[12px] py-[8px] text-[12px] text-[var(--text-secondary)]'>
+            Uploaded
+          </TableHead>
+          <TableHead className='w-[12%] px-[12px] py-[8px] text-[12px] text-[var(--text-secondary)]'>
+            Status
+          </TableHead>
+          <TableHead className='w-[14%] py-[8px] pr-[4px] pl-[12px] text-[12px] text-[var(--text-secondary)]'>
+            Actions
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {Array.from({ length: rowCount }).map((_, i) => (
+          <DocumentTableRowSkeleton key={i} />
+        ))}
+      </TableBody>
+    </Table>
+  )
+}
+
+interface KnowledgeBaseLoadingProps {
+  knowledgeBaseName: string
+}
+
+function KnowledgeBaseLoading({ knowledgeBaseName }: KnowledgeBaseLoadingProps) {
+  const params = useParams()
+  const workspaceId = params?.workspaceId as string
+
+  const breadcrumbItems = [
+    { label: 'Knowledge Base', href: `/workspace/${workspaceId}/knowledge` },
+    { label: knowledgeBaseName },
+  ]
+
+  return (
+    <div className='flex h-full flex-1 flex-col'>
+      <div className='flex flex-1 overflow-hidden'>
+        <div className='flex flex-1 flex-col overflow-auto px-[24px] pt-[24px] pb-[24px]'>
+          <Breadcrumb items={breadcrumbItems} />
+
+          <div className='mt-[14px] flex items-center justify-between'>
+            <Skeleton className='h-[27px] w-[200px] rounded-[4px]' />
+            <div className='flex items-center gap-2'>
+              <Skeleton className='h-[32px] w-[52px] rounded-[6px]' />
+              <Skeleton className='h-[32px] w-[32px] rounded-[6px]' />
+            </div>
+          </div>
+
+          <div className='mt-[4px]'>
+            <Skeleton className='h-[21px] w-[300px] rounded-[4px]' />
+          </div>
+
+          <div className='mt-[16px] flex items-center gap-[8px]'>
+            <Skeleton className='h-[21px] w-[80px] rounded-[4px]' />
+            <div className='mb-[-1.5px] h-[18px] w-[1.25px] rounded-full bg-[#3A3A3A]' />
+            <Skeleton className='h-[21px] w-[140px] rounded-[4px]' />
+          </div>
+
+          <div className='mt-[14px] flex items-center justify-between'>
+            <div className='flex h-[32px] w-[400px] items-center gap-[6px] rounded-[8px] bg-[var(--surface-5)] px-[8px]'>
+              <Search className='h-[14px] w-[14px] text-[var(--text-subtle)]' />
+              <Input
+                placeholder='Search documents...'
+                disabled
+                className='flex-1 border-0 bg-transparent px-0 font-medium text-[var(--text-secondary)] text-small leading-none placeholder:text-[var(--text-subtle)] focus-visible:ring-0 focus-visible:ring-offset-0'
+              />
+            </div>
+            <Button disabled variant='primary' className='h-[32px] rounded-[6px]'>
+              Add Documents
+            </Button>
+          </div>
+
+          <div className='mt-[12px] flex flex-1 flex-col overflow-hidden'>
+            <DocumentTableSkeleton rowCount={8} />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Formats a date string to relative time (e.g., "2h ago", "3d ago")
+ */
+function formatRelativeTime(dateString: string): string {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
+
+  if (diffInSeconds < 60) {
+    return 'just now'
+  }
+  if (diffInSeconds < 3600) {
+    const minutes = Math.floor(diffInSeconds / 60)
+    return `${minutes}m ago`
+  }
+  if (diffInSeconds < 86400) {
+    const hours = Math.floor(diffInSeconds / 3600)
+    return `${hours}h ago`
+  }
+  if (diffInSeconds < 604800) {
+    const days = Math.floor(diffInSeconds / 86400)
+    return `${days}d ago`
+  }
+  if (diffInSeconds < 2592000) {
+    const weeks = Math.floor(diffInSeconds / 604800)
+    return `${weeks}w ago`
+  }
+  if (diffInSeconds < 31536000) {
+    const months = Math.floor(diffInSeconds / 2592000)
+    return `${months}mo ago`
+  }
+  const years = Math.floor(diffInSeconds / 31536000)
+  return `${years}y ago`
+}
+
+/**
+ * Formats a date string to absolute format for tooltip display
+ */
+function formatAbsoluteDate(dateString: string): string {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+interface KnowledgeBaseProps {
+  id: string
+  knowledgeBaseName?: string
+}
+
+function getFileIcon(mimeType: string, filename: string) {
+  const IconComponent = getDocumentIcon(mimeType, filename)
+  return <IconComponent className='h-6 w-5 flex-shrink-0' />
+}
+
+function formatFileSize(bytes: number): string {
+  if (bytes === 0) return '0 Bytes'
+  const k = 1024
+  const sizes = ['Bytes', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return `${Number.parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`
+}
+
+const getStatusDisplay = (doc: DocumentData) => {
+  // Consolidated status: show processing status when not completed, otherwise show enabled/disabled
+  switch (doc.processingStatus) {
+    case 'pending':
+      return {
+        text: 'Pending',
+        className:
+          'inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+      }
+    case 'processing':
+      return {
+        text: (
+          <>
+            <Loader2 className='mr-1.5 h-3 w-3 animate-spin' />
+            Processing
+          </>
+        ),
+        className:
+          'inline-flex items-center rounded-md bg-purple-100 px-2 py-1 text-xs font-medium text-[var(--brand-primary-hex)] dark:bg-purple-900/30 dark:text-[var(--brand-primary-hex)]',
+      }
+    case 'failed':
+      return {
+        text: (
+          <>
+            Failed
+            {doc.processingError && <AlertCircle className='ml-1.5 h-3 w-3' />}
+          </>
+        ),
+        className:
+          'inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-300',
+      }
+    case 'completed':
+      return doc.enabled
+        ? {
+            text: 'Enabled',
+            className:
+              'inline-flex items-center rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400',
+          }
+        : {
+            text: 'Disabled',
+            className:
+              'inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+          }
+    default:
+      return {
+        text: 'Unknown',
+        className:
+          'inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+      }
+  }
+}
+
+export function KnowledgeBase({
+  id,
+  knowledgeBaseName: passedKnowledgeBaseName,
+}: KnowledgeBaseProps) {
+  const params = useParams()
+  const workspaceId = params.workspaceId as string
+  const { removeKnowledgeBase } = useKnowledgeBasesList(workspaceId, { enabled: false })
+  const userPermissions = useUserPermissionsContext()
+
+  const [searchQuery, setSearchQuery] = useState('')
+  const [showTagsModal, setShowTagsModal] = useState(false)
+
+  /**
+   * Memoize the search query setter to prevent unnecessary re-renders
+   */
+  const handleSearchChange = useCallback((newQuery: string) => {
+    setSearchQuery(newQuery)
+    setCurrentPage(1)
+  }, [])
+
+  const [selectedDocuments, setSelectedDocuments] = useState<Set<string>>(new Set())
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showAddDocumentsModal, setShowAddDocumentsModal] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isBulkOperating, setIsBulkOperating] = useState(false)
+  const [showDeleteDocumentModal, setShowDeleteDocumentModal] = useState(false)
+  const [documentToDelete, setDocumentToDelete] = useState<string | null>(null)
+  const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [sortBy, setSortBy] = useState<DocumentSortField>('uploadedAt')
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
+
+  const {
+    knowledgeBase,
+    isLoading: isLoadingKnowledgeBase,
+    error: knowledgeBaseError,
+    refresh: refreshKnowledgeBase,
+  } = useKnowledgeBase(id)
+  const {
+    documents,
+    pagination,
+    isLoading: isLoadingDocuments,
+    error: documentsError,
+    updateDocument,
+    refreshDocuments,
+  } = useKnowledgeBaseDocuments(id, {
+    search: searchQuery || undefined,
+    limit: DOCUMENTS_PER_PAGE,
+    offset: (currentPage - 1) * DOCUMENTS_PER_PAGE,
+    sortBy,
+    sortOrder,
+  })
+
+  const router = useRouter()
+
+  const knowledgeBaseName = knowledgeBase?.name || passedKnowledgeBaseName || 'Knowledge Base'
+  const error = knowledgeBaseError || documentsError
+
+  const totalPages = Math.ceil(pagination.total / pagination.limit)
+  const hasNextPage = currentPage < totalPages
+  const hasPrevPage = currentPage > 1
+
+  const goToPage = useCallback(
+    (page: number) => {
+      if (page >= 1 && page <= totalPages) {
+        setCurrentPage(page)
+      }
+    },
+    [totalPages]
+  )
+
+  const nextPage = useCallback(() => {
+    if (hasNextPage) {
+      setCurrentPage((prev) => prev + 1)
+    }
+  }, [hasNextPage])
+
+  const prevPage = useCallback(() => {
+    if (hasPrevPage) {
+      setCurrentPage((prev) => prev - 1)
+    }
+  }, [hasPrevPage])
+
+  const handleSort = useCallback(
+    (field: DocumentSortField) => {
+      if (sortBy === field) {
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+      } else {
+        setSortBy(field)
+        setSortOrder('desc')
+      }
+      setCurrentPage(1)
+    },
+    [sortBy, sortOrder]
+  )
+
+  const renderSortableHeader = (field: DocumentSortField, label: string, className = '') => (
+    <TableHead className={`px-[12px] py-[8px] ${className}`}>
+      <button
+        type='button'
+        onClick={() => handleSort(field)}
+        className='flex items-center gap-[4px] text-[12px] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]'
+      >
+        <span>{label}</span>
+        {sortBy === field &&
+          (sortOrder === 'asc' ? (
+            <ChevronUp className='h-[12px] w-[12px]' />
+          ) : (
+            <ChevronDown className='h-[12px] w-[12px]' />
+          ))}
+      </button>
+    </TableHead>
+  )
+
+  useEffect(() => {
+    const hasProcessingDocuments = documents.some(
+      (doc) => doc.processingStatus === 'pending' || doc.processingStatus === 'processing'
+    )
+
+    if (!hasProcessingDocuments) return
+
+    const refreshInterval = setInterval(async () => {
+      try {
+        if (!isDeleting) {
+          await checkForDeadProcesses()
+          await refreshDocuments()
+        }
+      } catch (error) {
+        logger.error('Error refreshing documents:', error)
+      }
+    }, 3000)
+
+    return () => clearInterval(refreshInterval)
+  }, [documents, refreshDocuments, isDeleting])
+
+  /**
+   * Checks for documents with stale processing states and marks them as failed
+   */
+  const checkForDeadProcesses = async () => {
+    const now = new Date()
+    const DEAD_PROCESS_THRESHOLD_MS = 600 * 1000 // 10 minutes
+
+    const staleDocuments = documents.filter((doc) => {
+      if (doc.processingStatus !== 'processing' || !doc.processingStartedAt) {
+        return false
+      }
+
+      const processingDuration = now.getTime() - new Date(doc.processingStartedAt).getTime()
+      return processingDuration > DEAD_PROCESS_THRESHOLD_MS
+    })
+
+    if (staleDocuments.length === 0) return
+
+    logger.warn(`Found ${staleDocuments.length} documents with dead processes`)
+
+    const markFailedPromises = staleDocuments.map(async (doc) => {
+      try {
+        const response = await fetch(`/api/knowledge/${id}/documents/${doc.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            markFailedDueToTimeout: true,
+          }),
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+          logger.error(`Failed to mark document ${doc.id} as failed: ${errorData.error}`)
+          return
+        }
+
+        const result = await response.json()
+        if (result.success) {
+          logger.info(`Successfully marked dead process as failed for document: ${doc.filename}`)
+        }
+      } catch (error) {
+        logger.error(`Error marking document ${doc.id} as failed:`, error)
+      }
+    })
+
+    await Promise.allSettled(markFailedPromises)
+  }
+
+  const handleToggleEnabled = async (docId: string) => {
+    const document = documents.find((doc) => doc.id === docId)
+    if (!document) return
+
+    try {
+      const response = await fetch(`/api/knowledge/${id}/documents/${docId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          enabled: !document.enabled,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update document')
+      }
+
+      const result = await response.json()
+
+      if (result.success) {
+        updateDocument(docId, { enabled: !document.enabled })
+      }
+    } catch (err) {
+      logger.error('Error updating document:', err)
+    }
+  }
+
+  /**
+   * Handles retrying a failed document processing
+   */
+  const handleRetryDocument = async (docId: string) => {
+    try {
+      updateDocument(docId, {
+        processingStatus: 'pending',
+        processingError: null,
+        processingStartedAt: null,
+        processingCompletedAt: null,
+      })
+
+      const response = await fetch(`/api/knowledge/${id}/documents/${docId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          retryProcessing: true,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to retry document processing')
+      }
+
+      const result = await response.json()
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to retry document processing')
+      }
+
+      await refreshDocuments()
+
+      let refreshAttempts = 0
+      const maxRefreshAttempts = 3
+      const refreshInterval = setInterval(async () => {
+        try {
+          refreshAttempts++
+          await refreshDocuments()
+          if (refreshAttempts >= maxRefreshAttempts) {
+            clearInterval(refreshInterval)
+          }
+        } catch (error) {
+          logger.error('Error refreshing documents after retry:', error)
+          clearInterval(refreshInterval)
+        }
+      }, 1000)
+
+      setTimeout(() => {
+        clearInterval(refreshInterval)
+      }, 4000)
+
+      logger.info(`Document retry initiated successfully for: ${docId}`)
+    } catch (err) {
+      logger.error('Error retrying document:', err)
+      const currentDoc = documents.find((doc) => doc.id === docId)
+      if (currentDoc) {
+        updateDocument(docId, {
+          processingStatus: 'failed',
+          processingError:
+            err instanceof Error ? err.message : 'Failed to retry document processing',
+        })
+      }
+    }
+  }
+
+  /**
+   * Opens the delete document confirmation modal
+   */
+  const handleDeleteDocument = (docId: string) => {
+    setDocumentToDelete(docId)
+    setShowDeleteDocumentModal(true)
+  }
+
+  /**
+   * Confirms and executes the deletion of a single document
+   */
+  const confirmDeleteDocument = async () => {
+    if (!documentToDelete) return
+
+    try {
+      const response = await fetch(`/api/knowledge/${id}/documents/${documentToDelete}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete document')
+      }
+
+      const result = await response.json()
+
+      if (result.success) {
+        refreshDocuments()
+
+        setSelectedDocuments((prev) => {
+          const newSet = new Set(prev)
+          newSet.delete(documentToDelete)
+          return newSet
+        })
+      }
+    } catch (err) {
+      logger.error('Error deleting document:', err)
+    } finally {
+      setShowDeleteDocumentModal(false)
+      setDocumentToDelete(null)
+    }
+  }
+
+  /**
+   * Handles selecting/deselecting a document
+   */
+  const handleSelectDocument = (docId: string, checked: boolean) => {
+    setSelectedDocuments((prev) => {
+      const newSet = new Set(prev)
+      if (checked) {
+        newSet.add(docId)
+      } else {
+        newSet.delete(docId)
+      }
+      return newSet
+    })
+  }
+
+  /**
+   * Handles selecting/deselecting all documents
+   */
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedDocuments(new Set(documents.map((doc) => doc.id)))
+    } else {
+      setSelectedDocuments(new Set())
+    }
+  }
+
+  const isAllSelected = documents.length > 0 && selectedDocuments.size === documents.length
+
+  /**
+   * Handles clicking on a document row to navigate to detail view
+   */
+  const handleDocumentClick = (docId: string) => {
+    const document = documents.find((doc) => doc.id === docId)
+    const urlParams = new URLSearchParams({
+      kbName: knowledgeBaseName,
+      docName: document?.filename || 'Document',
+    })
+    router.push(`/workspace/${workspaceId}/knowledge/${id}/${docId}?${urlParams.toString()}`)
+  }
+
+  /**
+   * Handles deleting the entire knowledge base
+   */
+  const handleDeleteKnowledgeBase = async () => {
+    if (!knowledgeBase) return
+
+    try {
+      setIsDeleting(true)
+
+      const response = await fetch(`/api/knowledge/${id}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete knowledge base')
+      }
+
+      const result = await response.json()
+
+      if (result.success) {
+        removeKnowledgeBase(id)
+        router.push(`/workspace/${workspaceId}/knowledge`)
+      } else {
+        throw new Error(result.error || 'Failed to delete knowledge base')
+      }
+    } catch (err) {
+      logger.error('Error deleting knowledge base:', err)
+      setIsDeleting(false)
+    }
+  }
+
+  /**
+   * Opens the add documents modal
+   */
+  const handleAddDocuments = () => {
+    setShowAddDocumentsModal(true)
+  }
+
+  /**
+   * Handles bulk enabling of selected documents
+   */
+  const handleBulkEnable = async () => {
+    const documentsToEnable = documents.filter(
+      (doc) => selectedDocuments.has(doc.id) && !doc.enabled
+    )
+
+    if (documentsToEnable.length === 0) return
+
+    try {
+      setIsBulkOperating(true)
+
+      const response = await fetch(`/api/knowledge/${id}/documents`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          operation: 'enable',
+          documentIds: documentsToEnable.map((doc) => doc.id),
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to enable documents')
+      }
+
+      const result = await response.json()
+
+      if (result.success) {
+        // Update successful documents in the store
+        result.data.updatedDocuments.forEach((updatedDoc: { id: string; enabled: boolean }) => {
+          updateDocument(updatedDoc.id, { enabled: updatedDoc.enabled })
+        })
+
+        logger.info(`Successfully enabled ${result.data.successCount} documents`)
+      }
+
+      // Clear selection after successful operation
+      setSelectedDocuments(new Set())
+    } catch (err) {
+      logger.error('Error enabling documents:', err)
+    } finally {
+      setIsBulkOperating(false)
+    }
+  }
+
+  /**
+   * Handles bulk disabling of selected documents
+   */
+  const handleBulkDisable = async () => {
+    const documentsToDisable = documents.filter(
+      (doc) => selectedDocuments.has(doc.id) && doc.enabled
+    )
+
+    if (documentsToDisable.length === 0) return
+
+    try {
+      setIsBulkOperating(true)
+
+      const response = await fetch(`/api/knowledge/${id}/documents`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          operation: 'disable',
+          documentIds: documentsToDisable.map((doc) => doc.id),
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to disable documents')
+      }
+
+      const result = await response.json()
+
+      if (result.success) {
+        result.data.updatedDocuments.forEach((updatedDoc: { id: string; enabled: boolean }) => {
+          updateDocument(updatedDoc.id, { enabled: updatedDoc.enabled })
+        })
+
+        logger.info(`Successfully disabled ${result.data.successCount} documents`)
+      }
+
+      setSelectedDocuments(new Set())
+    } catch (err) {
+      logger.error('Error disabling documents:', err)
+    } finally {
+      setIsBulkOperating(false)
+    }
+  }
+
+  /**
+   * Opens the bulk delete confirmation modal
+   */
+  const handleBulkDelete = () => {
+    if (selectedDocuments.size === 0) return
+    setShowBulkDeleteModal(true)
+  }
+
+  /**
+   * Confirms and executes the bulk deletion of selected documents
+   */
+  const confirmBulkDelete = async () => {
+    const documentsToDelete = documents.filter((doc) => selectedDocuments.has(doc.id))
+
+    if (documentsToDelete.length === 0) return
+
+    try {
+      setIsBulkOperating(true)
+
+      const response = await fetch(`/api/knowledge/${id}/documents`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          operation: 'delete',
+          documentIds: documentsToDelete.map((doc) => doc.id),
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete documents')
+      }
+
+      const result = await response.json()
+
+      if (result.success) {
+        logger.info(`Successfully deleted ${result.data.successCount} documents`)
+      }
+
+      await refreshDocuments()
+
+      setSelectedDocuments(new Set())
+    } catch (err) {
+      logger.error('Error deleting documents:', err)
+    } finally {
+      setIsBulkOperating(false)
+      setShowBulkDeleteModal(false)
+    }
+  }
+
+  const selectedDocumentsList = documents.filter((doc) => selectedDocuments.has(doc.id))
+  const enabledCount = selectedDocumentsList.filter((doc) => doc.enabled).length
+  const disabledCount = selectedDocumentsList.filter((doc) => !doc.enabled).length
+
+  if ((isLoadingKnowledgeBase || isLoadingDocuments) && !knowledgeBase && documents.length === 0) {
+    return <KnowledgeBaseLoading knowledgeBaseName={knowledgeBaseName} />
+  }
+
+  const breadcrumbItems = [
+    { label: 'Knowledge Base', href: `/workspace/${workspaceId}/knowledge` },
+    { label: knowledgeBaseName },
+  ]
+
+  if (error && !knowledgeBase) {
+    return (
+      <div className='flex h-full flex-1 flex-col'>
+        <div className='flex flex-1 overflow-hidden'>
+          <div className='flex flex-1 flex-col overflow-auto px-[24px] pt-[24px] pb-[24px]'>
+            <Breadcrumb items={breadcrumbItems} />
+
+            <div className='mt-[24px]'>
+              <div className='flex h-64 items-center justify-center rounded-lg border border-muted-foreground/25 bg-muted/20'>
+                <div className='text-center'>
+                  <p className='font-medium text-[var(--text-secondary)] text-sm'>
+                    Error loading knowledge base
+                  </p>
+                  <p className='mt-1 text-[var(--text-muted)] text-xs'>{error}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className='flex h-full flex-1 flex-col'>
+      <div className='flex flex-1 overflow-hidden'>
+        <div className='flex flex-1 flex-col overflow-auto px-[24px] pt-[24px] pb-[24px]'>
+          <Breadcrumb items={breadcrumbItems} />
+
+          <div className='mt-[14px] flex items-center justify-between'>
+            <h1 className='font-medium text-[18px] text-[var(--text-primary)]'>
+              {knowledgeBaseName}
+            </h1>
+            <div className='flex items-center gap-2'>
+              {userPermissions.canEdit && (
+                <Button
+                  onClick={() => setShowTagsModal(true)}
+                  variant='default'
+                  className='h-[32px] rounded-[6px]'
+                >
+                  Tags
+                </Button>
+              )}
+              <Tooltip.Root>
+                <Tooltip.Trigger asChild>
+                  <Button
+                    onClick={() => setShowDeleteDialog(true)}
+                    disabled={!userPermissions.canEdit}
+                    className='h-[32px] rounded-[6px]'
+                  >
+                    <Trash className='h-[14px] w-[14px]' />
+                  </Button>
+                </Tooltip.Trigger>
+                {!userPermissions.canEdit && (
+                  <Tooltip.Content>
+                    Write permission required to delete knowledge base
+                  </Tooltip.Content>
+                )}
+              </Tooltip.Root>
+            </div>
+          </div>
+
+          {knowledgeBase?.description && (
+            <p className='mt-[4px] line-clamp-2 max-w-[40vw] font-medium text-[14px] text-[var(--text-tertiary)]'>
+              {knowledgeBase.description}
+            </p>
+          )}
+
+          <div className='mt-[16px] flex items-center gap-[8px]'>
+            <span className='text-[14px] text-[var(--text-muted)]'>
+              {pagination.total} {pagination.total === 1 ? 'document' : 'documents'}
+            </span>
+            {knowledgeBase?.updatedAt && (
+              <>
+                <div className='mb-[-1.5px] h-[18px] w-[1.25px] rounded-full bg-[#3A3A3A]' />
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <span className='cursor-default text-[14px] text-[var(--text-muted)]'>
+                      last updated: {formatRelativeTime(knowledgeBase.updatedAt)}
+                    </span>
+                  </Tooltip.Trigger>
+                  <Tooltip.Content>{formatAbsoluteDate(knowledgeBase.updatedAt)}</Tooltip.Content>
+                </Tooltip.Root>
+              </>
+            )}
+          </div>
+
+          <div className='mt-[14px] flex items-center justify-between'>
+            <div className='flex h-[32px] w-[400px] items-center gap-[6px] rounded-[8px] bg-[var(--surface-5)] px-[8px]'>
+              <Search className='h-[14px] w-[14px] text-[var(--text-subtle)]' />
+              <Input
+                placeholder='Search documents...'
+                value={searchQuery}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className='flex-1 border-0 bg-transparent px-0 font-medium text-[var(--text-secondary)] text-small leading-none placeholder:text-[var(--text-subtle)] focus-visible:ring-0 focus-visible:ring-offset-0'
+              />
+              {searchQuery &&
+                (isLoadingDocuments ? (
+                  <Loader2 className='h-[14px] w-[14px] animate-spin text-[var(--text-subtle)]' />
+                ) : (
+                  <button
+                    onClick={() => handleSearchChange('')}
+                    className='text-[var(--text-subtle)] transition-colors hover:text-[var(--text-secondary)]'
+                  >
+                    <X className='h-[14px] w-[14px]' />
+                  </button>
+                ))}
+            </div>
+
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <Button
+                  onClick={handleAddDocuments}
+                  disabled={userPermissions.canEdit !== true}
+                  variant='primary'
+                  className='h-[32px] rounded-[6px]'
+                >
+                  Add Documents
+                </Button>
+              </Tooltip.Trigger>
+              {userPermissions.canEdit !== true && (
+                <Tooltip.Content>Write permission required to add documents</Tooltip.Content>
+              )}
+            </Tooltip.Root>
+          </div>
+
+          {error && !isLoadingKnowledgeBase && (
+            <div className='mt-[24px]'>
+              <div className='flex h-64 items-center justify-center rounded-lg border border-muted-foreground/25 bg-muted/20'>
+                <div className='text-center'>
+                  <p className='font-medium text-[var(--text-secondary)] text-sm'>
+                    Error loading documents
+                  </p>
+                  <p className='mt-1 text-[var(--text-muted)] text-xs'>{error}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className='mt-[12px] flex flex-1 flex-col'>
+            {isLoadingDocuments && documents.length === 0 ? (
+              <DocumentTableSkeleton rowCount={5} />
+            ) : documents.length === 0 ? (
+              <div className='mt-[10px] flex h-64 items-center justify-center rounded-lg border border-muted-foreground/25 bg-muted/20'>
+                <div className='text-center'>
+                  <p className='font-medium text-[var(--text-secondary)] text-sm'>
+                    {searchQuery ? 'No documents found' : 'No documents yet'}
+                  </p>
+                  <p className='mt-1 text-[var(--text-muted)] text-xs'>
+                    {searchQuery
+                      ? 'Try a different search term'
+                      : userPermissions.canEdit === true
+                        ? 'Add documents to get started'
+                        : 'Documents will appear here once added'}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <Table className='min-w-[700px] table-fixed text-[13px]'>
+                <TableHeader>
+                  <TableRow className='hover:bg-transparent'>
+                    <TableHead className='w-[28px] py-[8px] pr-0 pl-0'>
+                      <div className='flex items-center justify-center'>
+                        <Checkbox
+                          checked={isAllSelected}
+                          onCheckedChange={handleSelectAll}
+                          disabled={!userPermissions.canEdit}
+                          aria-label='Select all documents'
+                          className='h-[14px] w-[14px] border-[var(--border-2)] focus-visible:ring-[var(--brand-primary-hex)]/20 data-[state=checked]:border-[var(--brand-primary-hex)] data-[state=checked]:bg-[var(--brand-primary-hex)] [&>*]:h-[12px] [&>*]:w-[12px]'
+                        />
+                      </div>
+                    </TableHead>
+                    {renderSortableHeader('filename', 'Name', 'w-[180px] max-w-[180px]')}
+                    {renderSortableHeader('fileSize', 'Size', 'w-[8%]')}
+                    {renderSortableHeader('tokenCount', 'Tokens', 'w-[8%]')}
+                    {renderSortableHeader('chunkCount', 'Chunks', 'hidden w-[8%] lg:table-cell')}
+                    {renderSortableHeader('uploadedAt', 'Uploaded', 'w-[16%]')}
+                    {renderSortableHeader('processingStatus', 'Status', 'w-[12%]')}
+                    <TableHead className='w-[14%] py-[8px] pr-[4px] pl-[12px] text-[12px] text-[var(--text-secondary)]'>
+                      Actions
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {documents.map((doc) => {
+                    const isSelected = selectedDocuments.has(doc.id)
+                    const statusDisplay = getStatusDisplay(doc)
+
+                    return (
+                      <TableRow
+                        key={doc.id}
+                        className={`${
+                          isSelected ? 'bg-[var(--surface-2)]' : 'hover:bg-[var(--surface-2)]'
+                        } ${doc.processingStatus === 'completed' ? 'cursor-pointer' : 'cursor-default'}`}
+                        onClick={() => {
+                          if (doc.processingStatus === 'completed') {
+                            handleDocumentClick(doc.id)
+                          }
+                        }}
+                      >
+                        <TableCell className='w-[28px] py-[8px] pr-0 pl-0'>
+                          <div className='flex items-center justify-center'>
+                            <Checkbox
+                              checked={isSelected}
+                              onCheckedChange={(checked) =>
+                                handleSelectDocument(doc.id, checked as boolean)
+                              }
+                              disabled={!userPermissions.canEdit}
+                              onClick={(e) => e.stopPropagation()}
+                              aria-label={`Select ${doc.filename}`}
+                              className='h-[14px] w-[14px] border-[var(--border-2)] focus-visible:ring-[var(--brand-primary-hex)]/20 data-[state=checked]:border-[var(--brand-primary-hex)] data-[state=checked]:bg-[var(--brand-primary-hex)] [&>*]:h-[12px] [&>*]:w-[12px]'
+                            />
+                          </div>
+                        </TableCell>
+                        <TableCell className='w-[180px] max-w-[180px] px-[12px] py-[8px]'>
+                          <div className='flex min-w-0 items-center gap-[8px]'>
+                            {getFileIcon(doc.mimeType, doc.filename)}
+                            <Tooltip.Root>
+                              <Tooltip.Trigger asChild>
+                                <span
+                                  className='block min-w-0 truncate text-[14px] text-[var(--text-primary)]'
+                                  title={doc.filename}
+                                >
+                                  <SearchHighlight text={doc.filename} searchQuery={searchQuery} />
+                                </span>
+                              </Tooltip.Trigger>
+                              <Tooltip.Content side='top'>{doc.filename}</Tooltip.Content>
+                            </Tooltip.Root>
+                          </div>
+                        </TableCell>
+                        <TableCell className='px-[12px] py-[8px] text-[12px] text-[var(--text-muted)]'>
+                          {formatFileSize(doc.fileSize)}
+                        </TableCell>
+                        <TableCell className='px-[12px] py-[8px] text-[12px]'>
+                          {doc.processingStatus === 'completed' ? (
+                            doc.tokenCount > 1000 ? (
+                              `${(doc.tokenCount / 1000).toFixed(1)}k`
+                            ) : (
+                              doc.tokenCount.toLocaleString()
+                            )
+                          ) : (
+                            <span className='text-[var(--text-muted)]'>—</span>
+                          )}
+                        </TableCell>
+                        <TableCell className='hidden px-[12px] py-[8px] text-[12px] text-[var(--text-muted)] lg:table-cell'>
+                          {doc.processingStatus === 'completed'
+                            ? doc.chunkCount.toLocaleString()
+                            : '—'}
+                        </TableCell>
+                        <TableCell className='px-[12px] py-[8px]'>
+                          <div className='flex flex-col justify-center'>
+                            <div className='flex items-center font-medium text-[12px]'>
+                              <span>{format(new Date(doc.uploadedAt), 'h:mm a')}</span>
+                              <span className='mx-[6px] hidden text-[var(--text-muted)] xl:inline'>
+                                |
+                              </span>
+                              <span className='hidden text-[var(--text-muted)] xl:inline'>
+                                {format(new Date(doc.uploadedAt), 'MMM d, yyyy')}
+                              </span>
+                            </div>
+                            <div className='mt-[2px] text-[12px] text-[var(--text-muted)] lg:hidden'>
+                              {format(new Date(doc.uploadedAt), 'MMM d')}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className='px-[12px] py-[8px]'>
+                          {doc.processingStatus === 'failed' && doc.processingError ? (
+                            <Tooltip.Root>
+                              <Tooltip.Trigger asChild>
+                                <div className={statusDisplay.className} style={{ cursor: 'help' }}>
+                                  {statusDisplay.text}
+                                </div>
+                              </Tooltip.Trigger>
+                              <Tooltip.Content side='top' className='max-w-xs'>
+                                {doc.processingError}
+                              </Tooltip.Content>
+                            </Tooltip.Root>
+                          ) : (
+                            <div className={statusDisplay.className}>{statusDisplay.text}</div>
+                          )}
+                        </TableCell>
+                        <TableCell className='py-[8px] pr-[4px] pl-[12px]'>
+                          <div className='flex items-center gap-[4px]'>
+                            {doc.processingStatus === 'failed' && (
+                              <Tooltip.Root>
+                                <Tooltip.Trigger asChild>
+                                  <Button
+                                    variant='ghost'
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      handleRetryDocument(doc.id)
+                                    }}
+                                    className='h-[28px] w-[28px] p-0 text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                                  >
+                                    <RotateCcw className='h-[14px] w-[14px]' />
+                                  </Button>
+                                </Tooltip.Trigger>
+                                <Tooltip.Content side='top'>Retry processing</Tooltip.Content>
+                              </Tooltip.Root>
+                            )}
+                            <Tooltip.Root>
+                              <Tooltip.Trigger asChild>
+                                <Button
+                                  variant='ghost'
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleToggleEnabled(doc.id)
+                                  }}
+                                  disabled={
+                                    doc.processingStatus === 'processing' ||
+                                    doc.processingStatus === 'pending' ||
+                                    !userPermissions.canEdit
+                                  }
+                                  className='h-[28px] w-[28px] p-0 text-[var(--text-muted)] hover:text-[var(--text-primary)] disabled:opacity-50'
+                                >
+                                  {doc.enabled ? (
+                                    <Circle className='h-[14px] w-[14px]' />
+                                  ) : (
+                                    <CircleOff className='h-[14px] w-[14px]' />
+                                  )}
+                                </Button>
+                              </Tooltip.Trigger>
+                              <Tooltip.Content side='top'>
+                                {doc.processingStatus === 'processing' ||
+                                doc.processingStatus === 'pending'
+                                  ? 'Cannot modify while processing'
+                                  : !userPermissions.canEdit
+                                    ? 'Write permission required to modify documents'
+                                    : doc.enabled
+                                      ? 'Disable Document'
+                                      : 'Enable Document'}
+                              </Tooltip.Content>
+                            </Tooltip.Root>
+                            <Tooltip.Root>
+                              <Tooltip.Trigger asChild>
+                                <Button
+                                  variant='ghost'
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleDeleteDocument(doc.id)
+                                  }}
+                                  disabled={
+                                    doc.processingStatus === 'processing' ||
+                                    !userPermissions.canEdit
+                                  }
+                                  className='h-[28px] w-[28px] p-0 text-[var(--text-muted)] hover:text-[var(--text-error)] disabled:opacity-50'
+                                >
+                                  <Trash className='h-[14px] w-[14px]' />
+                                </Button>
+                              </Tooltip.Trigger>
+                              <Tooltip.Content side='top'>
+                                {doc.processingStatus === 'processing'
+                                  ? 'Cannot delete while processing'
+                                  : !userPermissions.canEdit
+                                    ? 'Write permission required to delete documents'
+                                    : 'Delete Document'}
+                              </Tooltip.Content>
+                            </Tooltip.Root>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            )}
+
+            {totalPages > 1 && (
+              <div className='flex items-center justify-center border-t bg-background px-6 py-4'>
+                <div className='flex items-center gap-1'>
+                  <Button
+                    variant='ghost'
+                    onClick={prevPage}
+                    disabled={!hasPrevPage || isLoadingDocuments}
+                    className='h-8 w-8 p-0'
+                  >
+                    <ChevronLeft className='h-4 w-4' />
+                  </Button>
+
+                  <div className='mx-4 flex items-center gap-6'>
+                    {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                      let page: number
+                      if (totalPages <= 5) {
+                        page = i + 1
+                      } else if (currentPage <= 3) {
+                        page = i + 1
+                      } else if (currentPage >= totalPages - 2) {
+                        page = totalPages - 4 + i
+                      } else {
+                        page = currentPage - 2 + i
+                      }
+
+                      if (page < 1 || page > totalPages) return null
+
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => goToPage(page)}
+                          disabled={isLoadingDocuments}
+                          className={`font-medium text-sm transition-colors hover:text-foreground disabled:opacity-50 ${
+                            page === currentPage ? 'text-foreground' : 'text-muted-foreground'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      )
+                    })}
+                  </div>
+
+                  <Button
+                    variant='ghost'
+                    onClick={nextPage}
+                    disabled={!hasNextPage || isLoadingDocuments}
+                    className='h-8 w-8 p-0'
+                  >
+                    <ChevronRight className='h-4 w-4' />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <BaseTagsModal open={showTagsModal} onOpenChange={setShowTagsModal} knowledgeBaseId={id} />
+
+      <Modal open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <ModalContent size='sm'>
+          <ModalHeader>Delete Knowledge Base</ModalHeader>
+          <ModalBody>
+            <p className='text-[12px] text-[var(--text-tertiary)]'>
+              Are you sure you want to delete "{knowledgeBaseName}"? This will permanently delete
+              the knowledge base and all {pagination.total} document
+              {pagination.total === 1 ? '' : 's'} within it.{' '}
+              <span className='text-[var(--text-error)]'>This action cannot be undone.</span>
+            </p>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              variant='active'
+              onClick={() => setShowDeleteDialog(false)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant='primary'
+              onClick={handleDeleteKnowledgeBase}
+              disabled={isDeleting}
+              className='!bg-[var(--text-error)] !text-white hover:!bg-[var(--text-error)]/90'
+            >
+              {isDeleting ? 'Deleting...' : 'Delete Knowledge Base'}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal open={showDeleteDocumentModal} onOpenChange={setShowDeleteDocumentModal}>
+        <ModalContent size='sm'>
+          <ModalHeader>Delete Document</ModalHeader>
+          <ModalBody>
+            <p className='text-[12px] text-[var(--text-tertiary)]'>
+              Are you sure you want to delete "
+              {documents.find((doc) => doc.id === documentToDelete)?.filename ?? 'this document'}"?{' '}
+              <span className='text-[var(--text-error)]'>This action cannot be undone.</span>
+            </p>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              variant='active'
+              onClick={() => {
+                setShowDeleteDocumentModal(false)
+                setDocumentToDelete(null)
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant='primary'
+              onClick={confirmDeleteDocument}
+              className='!bg-[var(--text-error)] !text-white hover:!bg-[var(--text-error)]/90'
+            >
+              Delete Document
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal open={showBulkDeleteModal} onOpenChange={setShowBulkDeleteModal}>
+        <ModalContent size='sm'>
+          <ModalHeader>Delete Documents</ModalHeader>
+          <ModalBody>
+            <p className='text-[12px] text-[var(--text-tertiary)]'>
+              Are you sure you want to delete {selectedDocuments.size} document
+              {selectedDocuments.size === 1 ? '' : 's'}?{' '}
+              <span className='text-[var(--text-error)]'>This action cannot be undone.</span>
+            </p>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant='active' onClick={() => setShowBulkDeleteModal(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant='primary'
+              onClick={confirmBulkDelete}
+              disabled={isBulkOperating}
+              className='!bg-[var(--text-error)] !text-white hover:!bg-[var(--text-error)]/90'
+            >
+              {isBulkOperating
+                ? 'Deleting...'
+                : `Delete ${selectedDocuments.size} Document${selectedDocuments.size === 1 ? '' : 's'}`}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* Add Documents Modal */}
+      <AddDocumentsModal
+        open={showAddDocumentsModal}
+        onOpenChange={setShowAddDocumentsModal}
+        knowledgeBaseId={id}
+        chunkingConfig={knowledgeBase?.chunkingConfig}
+        onUploadComplete={refreshDocuments}
+      />
+
+      <ActionBar
+        selectedCount={selectedDocuments.size}
+        onEnable={disabledCount > 0 ? handleBulkEnable : undefined}
+        onDisable={enabledCount > 0 ? handleBulkDisable : undefined}
+        onDelete={handleBulkDelete}
+        enabledCount={enabledCount}
+        disabledCount={disabledCount}
+        isLoading={isBulkOperating}
+      />
+    </div>
+  )
+}
+```
+
+--------------------------------------------------------------------------------
+
+````

@@ -1,0 +1,949 @@
+---
+source_txt: fullstack_samples/sim-main
+converted_utc: 2025-12-18T11:26:35Z
+part: 117
+parts_total: 933
+---
+
+# FULLSTACK CODE DATABASE SAMPLES sim-main
+
+## Verbatim Content (Part 117 of 933)
+
+````text
+================================================================================
+FULLSTACK SAMPLES CODE DATABASE (VERBATIM) - sim-main
+================================================================================
+Generated: December 18, 2025
+Source: fullstack_samples/sim-main
+================================================================================
+
+NOTES:
+- This output is verbatim because the source is user-owned.
+- Large/binary files may be skipped by size/binary detection limits.
+
+================================================================================
+
+---[FILE: incidentio.mdx]---
+Location: sim-main/apps/docs/content/docs/es/tools/incidentio.mdx
+
+```text
+---
+title: incidentio
+description: Gestiona incidentes con incident.io
+---
+
+import { BlockInfoCard } from "@/components/ui/block-info-card"
+
+<BlockInfoCard 
+  type="incidentio"
+  color="#E0E0E0"
+/>
+
+{/* MANUAL-CONTENT-START:intro */}
+Potencia tu gestión de incidentes con [incident.io](https://incident.io) – la plataforma líder para orquestar incidentes, agilizar procesos de respuesta y realizar seguimiento de elementos de acción, todo en un solo lugar. Integra incident.io sin problemas en tus flujos de trabajo automatizados para tomar el control de la creación de incidentes, colaboración en tiempo real, seguimientos, programación, escalaciones y mucho más.
+
+Con la herramienta incident.io, puedes:
+
+- **Listar y buscar incidentes**: Recupera rápidamente una lista de incidentes en curso o históricos, con metadatos como gravedad, estado y marcas de tiempo, usando `incidentio_incidents_list`.
+- **Crear nuevos incidentes**: Activa la creación de nuevos incidentes de forma programática a través de `incidentio_incidents_create`, especificando gravedad, nombre, tipo y detalles personalizados para asegurar que nada ralentice tu respuesta.
+- **Automatizar seguimientos de incidentes**: Aprovecha la potente automatización de incident.io para garantizar que no se pasen por alto elementos de acción importantes y aprendizajes, ayudando a los equipos a resolver problemas y mejorar procesos.
+- **Personalizar flujos de trabajo**: Integra tipos de incidentes personalizados, niveles de gravedad y campos personalizados adaptados a las necesidades de tu organización.
+- **Aplicar mejores prácticas con programaciones y escalaciones**: Agiliza la gestión de guardias e incidentes asignando, notificando y escalando automáticamente a medida que evolucionan las situaciones.
+
+incident.io permite a las organizaciones modernas responder más rápido, coordinar equipos y capturar aprendizajes para la mejora continua. Ya sea que gestiones incidentes de SRE, DevOps, Seguridad o TI, incident.io ofrece una respuesta a incidentes centralizada y de primera clase de manera programática para tus flujos de trabajo de agente.
+
+**Operaciones clave disponibles**:
+- `incidentio_incidents_list`: Lista, pagina y filtra incidentes con detalles completos.
+- `incidentio_incidents_create`: Abre nuevos incidentes de forma programática con atributos personalizados y control sobre la duplicación (idempotencia).
+- ...¡y más por venir!
+
+Mejora tu fiabilidad, responsabilidad y excelencia operativa integrando incident.io con tus automatizaciones de flujo de trabajo hoy mismo.
+{/* MANUAL-CONTENT-END */}
+
+## Instrucciones de uso
+
+Integra incident.io en el flujo de trabajo. Gestiona incidentes, acciones, seguimientos, flujos de trabajo, programaciones, escalaciones, campos personalizados y más.
+
+## Herramientas
+
+### `incidentio_incidents_list`
+
+Lista incidentes de incident.io. Devuelve una lista de incidentes con sus detalles, incluyendo gravedad, estado y marcas de tiempo.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | ----------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `page_size` | number | No | Número de incidentes a devolver por página \(predeterminado: 25\) |
+| `after` | string | No | Cursor de paginación para obtener la siguiente página de resultados |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incidents` | array | Lista de incidentes |
+
+### `incidentio_incidents_create`
+
+Crea un nuevo incidente en incident.io. Requiere idempotency_key, severity_id y visibility. Opcionalmente acepta name, summary, type y status.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | ----------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `idempotency_key` | string | Sí | Identificador único para prevenir la creación de incidentes duplicados. Usa un UUID o cadena única. |
+| `name` | string | No | Nombre del incidente \(opcional\) |
+| `summary` | string | No | Resumen breve del incidente |
+| `severity_id` | string | Sí | ID del nivel de gravedad \(obligatorio\) |
+| `incident_type_id` | string | No | ID del tipo de incidente |
+| `incident_status_id` | string | No | ID del estado inicial del incidente |
+| `visibility` | string | Sí | Visibilidad del incidente: "public" o "private" \(obligatorio\) |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incident` | objeto | El objeto de incidente creado |
+
+### `incidentio_incidents_show`
+
+Recupera información detallada sobre un incidente específico de incident.io mediante su ID. Devuelve detalles completos del incidente, incluidos campos personalizados y asignaciones de roles.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | cadena | Sí | Clave API de incident.io |
+| `id` | cadena | Sí | ID del incidente a recuperar |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incident` | objeto | Información detallada del incidente |
+
+### `incidentio_incidents_update`
+
+Actualiza un incidente existente en incident.io. Puede actualizar el nombre, resumen, gravedad, estado o tipo.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | cadena | Sí | Clave API de incident.io |
+| `id` | cadena | Sí | ID del incidente a actualizar |
+| `name` | cadena | No | Nombre actualizado del incidente |
+| `summary` | cadena | No | Resumen actualizado del incidente |
+| `severity_id` | cadena | No | ID de gravedad actualizado para el incidente |
+| `incident_status_id` | cadena | No | ID de estado actualizado para el incidente |
+| `incident_type_id` | cadena | No | ID de tipo de incidente actualizado |
+| `notify_incident_channel` | booleano | Sí | Indica si se debe notificar al canal de incidentes sobre esta actualización |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incident` | objeto | El objeto de incidente actualizado |
+
+### `incidentio_actions_list`
+
+Listar acciones de incident.io. Opcionalmente filtrar por ID de incidente.
+
+#### Entrada
+
+| Parámetro | Tipo | Requerido | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | cadena | Sí | Clave API de incident.io |
+| `incident_id` | cadena | No | Filtrar acciones por ID de incidente |
+| `page_size` | número | No | Número de acciones a devolver por página |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `actions` | array | Lista de acciones |
+
+### `incidentio_actions_show`
+
+Obtener información detallada sobre una acción específica de incident.io.
+
+#### Entrada
+
+| Parámetro | Tipo | Requerido | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | cadena | Sí | Clave API de incident.io |
+| `id` | cadena | Sí | ID de acción |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `action` | objeto | Detalles de la acción |
+
+### `incidentio_follow_ups_list`
+
+Listar seguimientos de incident.io. Opcionalmente filtrar por ID de incidente.
+
+#### Entrada
+
+| Parámetro | Tipo | Requerido | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | cadena | Sí | Clave API de incident.io |
+| `incident_id` | cadena | No | Filtrar seguimientos por ID de incidente |
+| `page_size` | número | No | Número de seguimientos a devolver por página |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `follow_ups` | array | Lista de seguimientos |
+
+### `incidentio_follow_ups_show`
+
+Obtener información detallada sobre un seguimiento específico de incident.io.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | ID del seguimiento |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `follow_up` | object | Detalles del seguimiento |
+
+### `incidentio_users_list`
+
+Listar todos los usuarios en tu espacio de trabajo de Incident.io. Devuelve detalles del usuario incluyendo id, nombre, correo electrónico y rol.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de Incident.io |
+| `page_size` | number | No | Número de resultados a devolver por página \(predeterminado: 25\) |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `users` | array | Lista de usuarios en el espacio de trabajo |
+
+### `incidentio_users_show`
+
+Obtener información detallada sobre un usuario específico en tu espacio de trabajo de Incident.io mediante su ID.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de Incident.io |
+| `id` | string | Sí | El identificador único del usuario a recuperar |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `user` | object | Detalles del usuario solicitado |
+
+### `incidentio_workflows_list`
+
+Lista todos los flujos de trabajo en tu espacio de trabajo de incident.io.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `page_size` | number | No | Número de flujos de trabajo a devolver por página |
+| `after` | string | No | Cursor de paginación para obtener la siguiente página de resultados |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `workflows` | array | Lista de flujos de trabajo |
+
+### `incidentio_workflows_show`
+
+Obtiene detalles de un flujo de trabajo específico en incident.io.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | El ID del flujo de trabajo a recuperar |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `workflow` | object | Los detalles del flujo de trabajo |
+
+### `incidentio_workflows_update`
+
+Actualiza un flujo de trabajo existente en incident.io.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | El ID del flujo de trabajo a actualizar |
+| `name` | string | No | Nuevo nombre para el flujo de trabajo |
+| `state` | string | No | Nuevo estado para el flujo de trabajo \(active, draft, o disabled\) |
+| `folder` | string | No | Nueva carpeta para el flujo de trabajo |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `workflow` | object | El flujo de trabajo actualizado |
+
+### `incidentio_workflows_delete`
+
+Eliminar un flujo de trabajo en incident.io.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | El ID del flujo de trabajo a eliminar |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `message` | string | Mensaje de éxito |
+
+### `incidentio_schedules_list`
+
+Listar todos los horarios en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `page_size` | number | No | Número de resultados por página \(predeterminado: 25\) |
+| `after` | string | No | Cursor de paginación para obtener la siguiente página de resultados |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `schedules` | array | Lista de horarios |
+
+### `incidentio_schedules_create`
+
+Crear un nuevo horario en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `name` | string | Sí | Nombre del horario |
+| `timezone` | string | Sí | Zona horaria para el horario \(p. ej., America/New_York\) |
+| `config` | string | Sí | Configuración del horario como cadena JSON con rotaciones. Ejemplo: \{"rotations": \[\{"name": "Primary", "users": \[\{"id": "user_id"\}\], "handover_start_at": "2024-01-01T09:00:00Z", "handovers": \[\{"interval": 1, "interval_type": "weekly"\}\]\}\]\} |
+| `Example` | string | No | Sin descripción |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `schedule` | objeto | El horario creado |
+
+### `incidentio_schedules_show`
+
+Obtener detalles de un horario específico en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | cadena | Sí | Clave API de incident.io |
+| `id` | cadena | Sí | El ID del horario |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `schedule` | objeto | Los detalles del horario |
+
+### `incidentio_schedules_update`
+
+Actualizar un horario existente en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | El ID del horario a actualizar |
+| `name` | string | No | Nuevo nombre para el horario |
+| `timezone` | string | No | Nueva zona horaria para el horario \(p. ej., America/New_York\) |
+| `config` | string | No | Configuración del horario como cadena JSON con rotaciones. Ejemplo: \{"rotations": \[\{"name": "Primary", "users": \[\{"id": "user_id"\}\], "handover_start_at": "2024-01-01T09:00:00Z", "handovers": \[\{"interval": 1, "interval_type": "weekly"\}\]\}\]\} |
+| `Example` | string | No | Sin descripción |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `schedule` | objeto | El horario actualizado |
+
+### `incidentio_schedules_delete`
+
+Eliminar un horario en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | cadena | Sí | Clave API de incident.io |
+| `id` | cadena | Sí | El ID del horario a eliminar |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `message` | string | Mensaje de éxito |
+
+### `incidentio_escalations_list`
+
+Listar todas las políticas de escalamiento en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `page_size` | number | No | Número de resultados por página \(predeterminado: 25\) |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `escalations` | array | Lista de políticas de escalamiento |
+
+### `incidentio_escalations_create`
+
+Crear una nueva política de escalamiento en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `idempotency_key` | string | Sí | Identificador único para prevenir la creación de escalamientos duplicados. Utilice un UUID o cadena única. |
+| `title` | string | Sí | Título del escalamiento |
+| `escalation_path_id` | string | No | ID de la ruta de escalamiento a utilizar \(obligatorio si no se proporcionan user_ids\) |
+| `user_ids` | string | No | Lista separada por comas de IDs de usuarios a notificar \(obligatorio si no se proporciona escalation_path_id\) |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `escalation` | object | La política de escalamiento creada |
+
+### `incidentio_escalations_show`
+
+Obtener detalles de una política de escalamiento específica en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | El ID de la política de escalación |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `escalation` | object | Los detalles de la política de escalación |
+
+### `incidentio_custom_fields_list`
+
+Listar todos los campos personalizados de incident.io.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `custom_fields` | array | Lista de campos personalizados |
+
+### `incidentio_custom_fields_create`
+
+Crear un nuevo campo personalizado en incident.io.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `name` | string | Sí | Nombre del campo personalizado |
+| `description` | string | Sí | Descripción del campo personalizado \(obligatorio\) |
+| `field_type` | string | Sí | Tipo del campo personalizado \(p. ej., text, single_select, multi_select, numeric, datetime, link, user, team\) |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `custom_field` | object | Campo personalizado creado |
+
+### `incidentio_custom_fields_show`
+
+Obtén información detallada sobre un campo personalizado específico de incident.io.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | ID del campo personalizado |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `custom_field` | object | Detalles del campo personalizado |
+
+### `incidentio_custom_fields_update`
+
+Actualiza un campo personalizado existente en incident.io.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | ID del campo personalizado |
+| `name` | string | Sí | Nuevo nombre para el campo personalizado \(obligatorio\) |
+| `description` | string | Sí | Nueva descripción para el campo personalizado \(obligatorio\) |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `custom_field` | object | Campo personalizado actualizado |
+
+### `incidentio_custom_fields_delete`
+
+Elimina un campo personalizado de incident.io.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | ID del campo personalizado |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `message` | string | Mensaje de éxito |
+
+### `incidentio_severities_list`
+
+Lista todos los niveles de gravedad configurados en tu espacio de trabajo de Incident.io. Devuelve detalles de gravedad incluyendo id, nombre, descripción y rango.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de Incident.io |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `severities` | array | Lista de niveles de gravedad |
+
+### `incidentio_incident_statuses_list`
+
+Lista todos los estados de incidentes configurados en tu espacio de trabajo de Incident.io. Devuelve detalles del estado incluyendo id, nombre, descripción y categoría.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de Incident.io |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incident_statuses` | array | Lista de estados de incidentes |
+
+### `incidentio_incident_types_list`
+
+Lista todos los tipos de incidentes configurados en tu espacio de trabajo de Incident.io. Devuelve detalles del tipo incluyendo id, nombre, descripción y bandera predeterminada.
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de Incident.io |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incident_types` | array | Lista de tipos de incidentes |
+
+### `incidentio_incident_roles_list`
+
+Lista todos los roles de incidentes en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incident_roles` | array | Lista de roles de incidente |
+
+### `incidentio_incident_roles_create`
+
+Crear un nuevo rol de incidente en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `name` | string | Sí | Nombre del rol de incidente |
+| `description` | string | Sí | Descripción del rol de incidente |
+| `instructions` | string | Sí | Instrucciones para el rol de incidente |
+| `shortform` | string | Sí | Abreviatura del rol |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incident_role` | object | El rol de incidente creado |
+
+### `incidentio_incident_roles_show`
+
+Obtener detalles de un rol de incidente específico en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | El ID del rol de incidente |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incident_role` | object | Los detalles del rol de incidente |
+
+### `incidentio_incident_roles_update`
+
+Actualizar un rol de incidente existente en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | El ID del rol de incidente a actualizar |
+| `name` | string | Sí | Nombre del rol de incidente |
+| `description` | string | Sí | Descripción del rol de incidente |
+| `instructions` | string | Sí | Instrucciones para el rol de incidente |
+| `shortform` | string | Sí | Abreviatura del rol |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incident_role` | object | El rol de incidente actualizado |
+
+### `incidentio_incident_roles_delete`
+
+Eliminar un rol de incidente en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | El ID del rol de incidente a eliminar |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `message` | string | Mensaje de éxito |
+
+### `incidentio_incident_timestamps_list`
+
+Listar todas las definiciones de marca de tiempo de incidentes en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incident_timestamps` | array | Lista de definiciones de marca de tiempo de incidentes |
+
+### `incidentio_incident_timestamps_show`
+
+Obtener detalles de una definición específica de marca de tiempo de incidente en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | El ID de la marca de tiempo del incidente |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incident_timestamp` | object | Los detalles de la marca de tiempo del incidente |
+
+### `incidentio_incident_updates_list`
+
+Listar todas las actualizaciones para un incidente específico en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `incident_id` | string | No | El ID del incidente para obtener actualizaciones \(opcional - si no se proporciona, devuelve todas las actualizaciones\) |
+| `page_size` | number | No | Número de resultados a devolver por página |
+| `after` | string | No | Cursor para paginación |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `incident_updates` | array | Lista de actualizaciones de incidentes |
+
+### `incidentio_schedule_entries_list`
+
+Listar todas las entradas para un horario específico en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `schedule_id` | string | Sí | El ID del horario para obtener entradas |
+| `entry_window_start` | string | No | Fecha/hora de inicio para filtrar entradas \(formato ISO 8601\) |
+| `entry_window_end` | string | No | Fecha/hora de fin para filtrar entradas \(formato ISO 8601\) |
+| `page_size` | number | No | Número de resultados a devolver por página |
+| `after` | string | No | Cursor para paginación |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `schedule_entries` | array | Lista de entradas de horario |
+
+### `incidentio_schedule_overrides_create`
+
+Crear una nueva anulación de horario en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `rotation_id` | string | Sí | El ID de la rotación a anular |
+| `schedule_id` | string | Sí | El ID del horario |
+| `user_id` | string | No | El ID del usuario a asignar \(proporcione uno de: user_id, user_email, o user_slack_id\) |
+| `user_email` | string | No | El correo electrónico del usuario a asignar \(proporcione uno de: user_id, user_email, o user_slack_id\) |
+| `user_slack_id` | string | No | El ID de Slack del usuario a asignar \(proporcione uno de: user_id, user_email, o user_slack_id\) |
+| `start_at` | string | Sí | Cuándo comienza la anulación \(formato ISO 8601\) |
+| `end_at` | string | Sí | Cuándo termina la anulación \(formato ISO 8601\) |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `override` | object | La anulación de horario creada |
+
+### `incidentio_escalation_paths_create`
+
+Crear una nueva ruta de escalamiento en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `name` | string | Sí | Nombre de la ruta de escalamiento |
+| `path` | json | Sí | Array de niveles de escalamiento con objetivos y tiempo para confirmar en segundos. Cada nivel debe tener: targets \(array de \{id, type, schedule_id?, user_id?, urgency\}\) y time_to_ack_seconds \(número\) |
+| `working_hours` | json | No | Configuración opcional de horas laborables. Array de \{weekday, start_time, end_time\} |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `escalation_path` | objeto | La ruta de escalado creada |
+
+### `incidentio_escalation_paths_show`
+
+Obtener detalles de una ruta de escalado específica en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | El ID de la ruta de escalado |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `escalation_path` | objeto | Los detalles de la ruta de escalado |
+
+### `incidentio_escalation_paths_update`
+
+Actualizar una ruta de escalado existente en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | El ID de la ruta de escalado a actualizar |
+| `name` | string | No | Nuevo nombre para la ruta de escalado |
+| `path` | json | No | Nueva configuración de ruta de escalado. Array de niveles de escalado con objetivos y time_to_ack_seconds |
+| `working_hours` | json | No | Nueva configuración de horario laboral. Array de \{weekday, start_time, end_time\} |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `escalation_path` | objeto | La ruta de escalado actualizada |
+
+### `incidentio_escalation_paths_delete`
+
+Eliminar una ruta de escalado en incident.io
+
+#### Entrada
+
+| Parámetro | Tipo | Requerido | Descripción |
+| --------- | ---- | -------- | ----------- |
+| `apiKey` | string | Sí | Clave API de incident.io |
+| `id` | string | Sí | El ID de la ruta de escalación a eliminar |
+
+#### Salida
+
+| Parámetro | Tipo | Descripción |
+| --------- | ---- | ----------- |
+| `message` | string | Mensaje de éxito |
+
+## Notas
+
+- Categoría: `tools`
+- Tipo: `incidentio`
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: index.mdx]---
+Location: sim-main/apps/docs/content/docs/es/tools/index.mdx
+
+```text
+---
+title: Descripción general
+description: Herramientas potentes para mejorar tus flujos de trabajo agénticos
+---
+
+import { Card, Cards } from "fumadocs-ui/components/card";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import { Video } from '@/components/ui/video';
+
+Las herramientas son componentes potentes en Sim que permiten a tus flujos de trabajo interactuar con servicios externos, procesar datos y realizar tareas especializadas. Amplían las capacidades de tus agentes y flujos de trabajo proporcionando acceso a varias APIs y servicios.
+
+<div className="mx-auto w-full overflow-hidden rounded-lg">
+  <Video src="toolbar.mp4" width={700} height={450} />
+</div>
+
+## ¿Qué es una herramienta?
+
+Una herramienta es un componente especializado que proporciona una funcionalidad específica o integración con servicios externos. Las herramientas pueden utilizarse para buscar en la web, interactuar con bases de datos, procesar imágenes, generar texto o imágenes, comunicarse a través de plataformas de mensajería y mucho más.
+
+## Uso de herramientas en flujos de trabajo
+
+Hay dos formas principales de utilizar herramientas en tus flujos de trabajo de Sim:
+
+<Steps>
+  <Step>
+    <strong>Como bloques independientes</strong>: Las herramientas pueden añadirse como bloques individuales en el lienzo cuando necesitas acceso determinista y directo a su funcionalidad. Esto te da un control preciso sobre cuándo y cómo se llama a la herramienta.
+  </Step>
+  <Step>
+    <strong>Como herramientas de agente</strong>: Las herramientas pueden añadirse a los bloques de Agente haciendo clic en "Añadir herramientas" y configurando los parámetros requeridos. Esto permite a los agentes elegir dinámicamente qué herramientas usar según el contexto y los requisitos de la tarea.
+  </Step>
+</Steps>
+
+## Configuración de herramientas
+
+Cada herramienta requiere una configuración específica para funcionar correctamente. Los elementos comunes de configuración incluyen:
+
+- **Claves API**: Muchas herramientas requieren autenticación mediante claves API
+- **Parámetros de conexión**: Endpoints, identificadores de bases de datos, etc.
+- **Formato de entrada**: Cómo deben estructurarse los datos para la herramienta
+- **Manejo de salida**: Cómo procesar los resultados de la herramienta
+
+## Herramientas disponibles
+
+Sim proporciona una colección diversa de herramientas para varios propósitos, incluyendo:
+
+- **IA y procesamiento de lenguaje**: OpenAI, ElevenLabs, servicios de traducción
+- **Búsqueda e investigación**: Google Search, Tavily, Exa, Perplexity
+- **Manipulación de documentos**: Google Docs, Google Sheets, Notion, Confluence
+- **Procesamiento de medios**: Vision, Image Generator
+- **Comunicación**: Slack, WhatsApp, Twilio SMS, Gmail
+- **Almacenamiento de datos**: Pinecone, Supabase, Airtable
+- **Desarrollo**: GitHub
+
+Cada herramienta tiene su propia página de documentación dedicada con instrucciones detalladas sobre configuración y uso.
+
+## Resultados de las herramientas
+
+Las herramientas normalmente devuelven datos estructurados que pueden ser procesados por bloques subsiguientes en tu flujo de trabajo. El formato de estos datos varía dependiendo de la herramienta y la operación, pero generalmente incluye:
+
+- El contenido principal o resultado
+- Metadatos sobre la operación
+- Información de estado
+
+Consulta la documentación específica de cada herramienta para entender su formato exacto de salida.
+```
+
+--------------------------------------------------------------------------------
+
+````

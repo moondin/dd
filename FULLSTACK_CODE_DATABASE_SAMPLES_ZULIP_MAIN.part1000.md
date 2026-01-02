@@ -1,0 +1,61 @@
+---
+source_txt: fullstack_samples/zulip-main
+converted_utc: 2025-12-18T13:06:14Z
+part: 1000
+parts_total: 1290
+---
+
+# FULLSTACK CODE DATABASE SAMPLES zulip-main
+
+## Verbatim Content (Part 1000 of 1290)
+
+````text
+================================================================================
+FULLSTACK SAMPLES CODE DATABASE (VERBATIM) - zulip-main
+================================================================================
+Generated: December 18, 2025
+Source: fullstack_samples/zulip-main
+================================================================================
+
+NOTES:
+- This output is verbatim because the source is user-owned.
+- Large/binary files may be skipped by size/binary detection limits.
+
+================================================================================
+
+---[FILE: test_health.py]---
+Location: zulip-main/zerver/tests/test_health.py
+
+```python
+from unittest import mock
+
+from zerver.lib.exceptions import ServerNotReadyError
+from zerver.lib.test_classes import ZulipTestCase
+
+
+class HealthTest(ZulipTestCase):
+    def test_healthy(self) -> None:
+        # We do not actually use rabbitmq in tests, so this fails
+        # unless it's mocked out.
+        with mock.patch("zerver.views.health.check_rabbitmq"):
+            result = self.client_get("/health")
+        self.assert_json_success(result)
+
+    def test_database_failure(self) -> None:
+        with (
+            mock.patch(
+                "zerver.views.health.check_database",
+                side_effect=ServerNotReadyError("Cannot query postgresql"),
+            ),
+            self.assertLogs(level="ERROR") as logs,
+            self.assertRaisesRegex(ServerNotReadyError, r"^Cannot query postgresql$"),
+        ):
+            self.client_get("/health")
+        self.assertIn(
+            "zerver.lib.exceptions.ServerNotReadyError: Cannot query postgresql", logs.output[0]
+        )
+```
+
+--------------------------------------------------------------------------------
+
+````

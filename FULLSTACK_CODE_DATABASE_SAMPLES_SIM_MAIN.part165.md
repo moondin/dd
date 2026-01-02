@@ -1,0 +1,954 @@
+---
+source_txt: fullstack_samples/sim-main
+converted_utc: 2025-12-18T11:26:35Z
+part: 165
+parts_total: 933
+---
+
+# FULLSTACK CODE DATABASE SAMPLES sim-main
+
+## Verbatim Content (Part 165 of 933)
+
+````text
+================================================================================
+FULLSTACK SAMPLES CODE DATABASE (VERBATIM) - sim-main
+================================================================================
+Generated: December 18, 2025
+Source: fullstack_samples/sim-main
+================================================================================
+
+NOTES:
+- This output is verbatim because the source is user-owned.
+- Large/binary files may be skipped by size/binary detection limits.
+
+================================================================================
+
+---[FILE: jira.mdx]---
+Location: sim-main/apps/docs/content/docs/fr/tools/jira.mdx
+
+```text
+---
+title: Jira
+description: Interagir avec Jira
+---
+
+import { BlockInfoCard } from "@/components/ui/block-info-card"
+
+<BlockInfoCard 
+  type="jira"
+  color="#E0E0E0"
+/>
+
+{/* MANUAL-CONTENT-START:intro */}
+[Jira](https://www.atlassian.com/jira) est une plateforme leader de gestion de projet et de suivi des problèmes qui aide les équipes à planifier, suivre et gérer efficacement les projets de développement logiciel agile. En tant que partie de la suite Atlassian, Jira est devenu la référence dans l'industrie pour les équipes de développement logiciel et les professionnels de la gestion de projet dans le monde entier.
+
+Jira fournit un ensemble complet d'outils pour gérer des projets complexes grâce à son système de flux de travail flexible et personnalisable. Avec son API robuste et ses capacités d'intégration, Jira permet aux équipes de rationaliser leurs processus de développement et de maintenir une visibilité claire sur l'avancement des projets.
+
+Les fonctionnalités clés de Jira comprennent :
+
+- Gestion de projet agile : prise en charge des méthodologies Scrum et Kanban avec des tableaux et des flux de travail personnalisables
+- Suivi des problèmes : système sophistiqué de suivi des bugs, des récits utilisateurs, des épopées et des tâches avec des rapports détaillés
+- Automatisation des flux de travail : règles d'automatisation puissantes pour rationaliser les tâches et processus répétitifs
+- Recherche avancée : JQL (Jira Query Language) pour le filtrage et la création de rapports complexes
+
+Dans Sim, l'intégration de Jira permet à vos agents d'interagir de manière transparente avec votre flux de travail de gestion de projet. Cela crée des opportunités pour la création, la mise à jour et le suivi automatisés des problèmes dans le cadre de vos flux de travail IA. L'intégration permet aux agents de créer, récupérer et mettre à jour des tickets Jira par programmation, facilitant les tâches de gestion de projet automatisées et garantissant que les informations importantes sont correctement suivies et documentées. En connectant Sim avec Jira, vous pouvez créer des agents intelligents qui maintiennent la visibilité du projet tout en automatisant les tâches routinières de gestion de projet, améliorant la productivité de l'équipe et assurant un suivi cohérent des projets.
+{/* MANUAL-CONTENT-END */}
+
+## Instructions d'utilisation
+
+Intégrez Jira dans le flux de travail. Peut lire, écrire et mettre à jour des tickets. Peut également déclencher des flux de travail basés sur des événements webhook Jira.
+
+## Outils
+
+### `jira_retrieve`
+
+Récupérer des informations détaillées sur un ticket Jira spécifique
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `projectId` | chaîne | Non | ID du projet Jira \(facultatif ; non requis pour récupérer un seul ticket\). |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira à récupérer \(ex. : PROJ-123\) |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | chaîne | Horodatage de l'opération |
+| `issueKey` | chaîne | Clé du ticket \(ex. : PROJ-123\) |
+| `summary` | chaîne | Résumé du ticket |
+| `description` | json | Contenu de la description du ticket |
+| `created` | chaîne | Horodatage de création du ticket |
+| `updated` | chaîne | Horodatage de dernière mise à jour du ticket |
+| `issue` | json | Objet complet du ticket avec tous les champs |
+
+### `jira_update`
+
+Mettre à jour un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `projectId` | chaîne | Non | ID du projet Jira pour mettre à jour les tickets. S'il n'est pas fourni, tous les tickets seront récupérés. |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira à mettre à jour |
+| `summary` | chaîne | Non | Nouveau résumé pour le ticket |
+| `description` | chaîne | Non | Nouvelle description pour le ticket |
+| `status` | chaîne | Non | Nouveau statut pour le ticket |
+| `priority` | chaîne | Non | Nouvelle priorité pour le ticket |
+| `assignee` | chaîne | Non | Nouvel assigné pour le ticket |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | chaîne | Horodatage de l'opération |
+| `issueKey` | chaîne | Clé du ticket mis à jour \(ex. : PROJ-123\) |
+| `summary` | chaîne | Résumé du ticket après mise à jour |
+
+### `jira_write`
+
+Rédiger une demande Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `domain` | string | Oui | Votre domaine Jira (ex. : votreentreprise.atlassian.net) |
+| `projectId` | string | Oui | ID du projet pour la demande |
+| `summary` | string | Oui | Résumé de la demande |
+| `description` | string | Non | Description de la demande |
+| `priority` | string | Non | Priorité de la demande |
+| `assignee` | string | Non | Assigné de la demande |
+| `cloudId` | string | Non | ID Jira Cloud pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+| `issueType` | string | Oui | Type de demande à créer (ex. : Tâche, Story) |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | chaîne | Horodatage de l'opération |
+| `issueKey` | chaîne | Clé du ticket créé \(ex. : PROJ-123\) |
+| `summary` | chaîne | Résumé du ticket |
+| `url` | chaîne | URL vers le ticket créé |
+
+### `jira_bulk_read`
+
+Récupérer plusieurs demandes Jira en masse
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `domain` | string | Oui | Votre domaine Jira (ex. : votreentreprise.atlassian.net) |
+| `projectId` | string | Oui | ID du projet Jira |
+| `cloudId` | string | Non | ID Jira Cloud |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `issues` | tableau | Tableau des tickets Jira avec horodatages ts, résumé, description, création et mise à jour |
+
+### `jira_delete_issue`
+
+Supprimer un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira à supprimer \(ex. : PROJ-123\) |
+| `deleteSubtasks` | booléen | Non | Indique s'il faut supprimer les sous-tâches. Si faux, les tickets parents avec sous-tâches ne peuvent pas être supprimés. |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | chaîne | Horodatage de l'opération |
+| `issueKey` | chaîne | Clé du ticket supprimé |
+
+### `jira_assign_issue`
+
+Assigner un ticket Jira à un utilisateur
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira à assigner \(ex. : PROJ-123\) |
+| `accountId` | chaîne | Oui | ID de compte de l'utilisateur à qui assigner le ticket. Utilisez "-1" pour l'attribution automatique ou null pour retirer l'assignation. |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | chaîne | Horodatage de l'opération |
+| `issueKey` | chaîne | Clé du ticket qui a été assigné |
+| `assigneeId` | chaîne | ID de compte de l'assigné |
+
+### `jira_transition_issue`
+
+Déplacer un ticket Jira entre les statuts de workflow (par ex., À faire -> En cours)
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira à faire transiter \(ex. : PROJ-123\) |
+| `transitionId` | chaîne | Oui | ID de la transition à exécuter \(ex. : "11" pour "À faire", "21" pour "En cours"\) |
+| `comment` | chaîne | Non | Commentaire optionnel à ajouter lors de la transition du ticket |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `issueKey` | string | Clé du ticket qui a été transitionné |
+| `transitionId` | string | ID de la transition appliquée |
+
+### `jira_search_issues`
+
+Rechercher des tickets Jira à l'aide de JQL (Jira Query Language)
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `jql` | chaîne | Oui | Chaîne de requête JQL pour rechercher des tickets \(ex. : "project = PROJ AND status = Open"\) |
+| `startAt` | nombre | Non | L'index du premier résultat à renvoyer \(pour la pagination\) |
+| `maxResults` | nombre | Non | Nombre maximum de résultats à renvoyer \(par défaut : 50\) |
+| `fields` | tableau | Non | Tableau des noms de champs à renvoyer \(par défaut : \['summary', 'status', 'assignee', 'created', 'updated'\]\) |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `total` | number | Nombre total de tickets correspondants |
+| `startAt` | number | Index de début de pagination |
+| `maxResults` | number | Nombre maximum de résultats par page |
+| `issues` | array | Tableau des tickets correspondants avec clé, résumé, statut, assigné, créé, mis à jour |
+
+### `jira_add_comment`
+
+Ajouter un commentaire à un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira auquel ajouter un commentaire \(ex. : PROJ-123\) |
+| `body` | chaîne | Oui | Texte du corps du commentaire |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `issueKey` | string | Clé du ticket auquel le commentaire a été ajouté |
+| `commentId` | string | ID du commentaire créé |
+| `body` | string | Contenu textuel du commentaire |
+
+### `jira_get_comments`
+
+Obtenir tous les commentaires d'un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira dont il faut récupérer les commentaires \(ex. : PROJ-123\) |
+| `startAt` | nombre | Non | Index du premier commentaire à renvoyer \(par défaut : 0\) |
+| `maxResults` | nombre | Non | Nombre maximum de commentaires à renvoyer \(par défaut : 50\) |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `issueKey` | string | Clé du ticket |
+| `total` | number | Nombre total de commentaires |
+| `comments` | array | Tableau des commentaires avec id, auteur, corps, créé, mis à jour |
+
+### `jira_update_comment`
+
+Mettre à jour un commentaire existant sur un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira contenant le commentaire \(ex. : PROJ-123\) |
+| `commentId` | chaîne | Oui | ID du commentaire à mettre à jour |
+| `body` | chaîne | Oui | Texte du commentaire mis à jour |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `issueKey` | string | Clé du ticket |
+| `commentId` | string | ID du commentaire mis à jour |
+| `body` | string | Texte du commentaire mis à jour |
+
+### `jira_delete_comment`
+
+Supprimer un commentaire d'un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira contenant le commentaire \(ex. : PROJ-123\) |
+| `commentId` | chaîne | Oui | ID du commentaire à supprimer |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `issueKey` | string | Clé du ticket |
+| `commentId` | string | ID du commentaire supprimé |
+
+### `jira_get_attachments`
+
+Obtenir toutes les pièces jointes d'un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `domain` | string | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | string | Oui | Clé du ticket Jira pour obtenir les pièces jointes \(ex. : PROJ-123\) |
+| `cloudId` | string | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `issueKey` | string | Clé du ticket |
+| `attachments` | array | Tableau des pièces jointes avec id, nom de fichier, taille, type MIME, date de création, auteur |
+
+### `jira_delete_attachment`
+
+Supprimer une pièce jointe d'un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `domain` | string | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `attachmentId` | string | Oui | ID de la pièce jointe à supprimer |
+| `cloudId` | string | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `attachmentId` | string | ID de la pièce jointe supprimée |
+
+### `jira_add_worklog`
+
+Ajouter une entrée de journal de travail pour le suivi du temps à un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira auquel ajouter le journal de travail \(ex. : PROJ-123\) |
+| `timeSpentSeconds` | nombre | Oui | Temps passé en secondes |
+| `comment` | chaîne | Non | Commentaire optionnel pour l'entrée du journal de travail |
+| `started` | chaîne | Non | Heure de début optionnelle au format ISO \(par défaut : heure actuelle\) |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `issueKey` | string | Clé du ticket auquel le journal de travail a été ajouté |
+| `worklogId` | string | ID du journal de travail créé |
+| `timeSpentSeconds` | number | Temps passé en secondes |
+
+### `jira_get_worklogs`
+
+Obtenir toutes les entrées du journal de travail d'un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira dont il faut obtenir les journaux de travail \(ex. : PROJ-123\) |
+| `startAt` | nombre | Non | Index du premier journal de travail à retourner \(par défaut : 0\) |
+| `maxResults` | nombre | Non | Nombre maximum de journaux de travail à retourner \(par défaut : 50\) |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `issueKey` | string | Clé du ticket |
+| `total` | number | Nombre total de journaux de travail |
+| `worklogs` | array | Tableau des journaux de travail avec id, auteur, temps passé en secondes, temps passé, commentaire, date de création, mise à jour, démarrage |
+
+### `jira_update_worklog`
+
+Mettre à jour une entrée de journal de travail existante sur un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira contenant le journal de travail \(ex. : PROJ-123\) |
+| `worklogId` | chaîne | Oui | ID de l'entrée du journal de travail à mettre à jour |
+| `timeSpentSeconds` | nombre | Non | Temps passé en secondes |
+| `comment` | chaîne | Non | Commentaire optionnel pour l'entrée du journal de travail |
+| `started` | chaîne | Non | Heure de début optionnelle au format ISO |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `issueKey` | string | Clé du ticket |
+| `worklogId` | string | ID du journal de travail mis à jour |
+
+### `jira_delete_worklog`
+
+Supprimer une entrée de journal de travail d'un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | ----------- | ----------- |
+| `domain` | chaîne | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | chaîne | Oui | Clé du ticket Jira contenant le journal de travail \(ex. : PROJ-123\) |
+| `worklogId` | chaîne | Oui | ID de l'entrée du journal de travail à supprimer |
+| `cloudId` | chaîne | Non | ID Cloud Jira pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `issueKey` | string | Clé du ticket |
+| `worklogId` | string | ID du journal de travail supprimé |
+
+### `jira_create_issue_link`
+
+Créer une relation de lien entre deux tickets Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `domain` | string | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `inwardIssueKey` | string | Oui | Clé du ticket Jira pour la demande entrante \(ex. : PROJ-123\) |
+| `outwardIssueKey` | string | Oui | Clé du ticket Jira pour la demande sortante \(ex. : PROJ-456\) |
+| `linkType` | string | Oui | Le type de relation de lien \(ex. : "Bloque", "Est lié à", "Duplique"\) |
+| `comment` | string | Non | Commentaire optionnel à ajouter au lien de la demande |
+| `cloudId` | string | Non | ID Jira Cloud pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `inwardIssue` | string | Clé du ticket entrant |
+| `outwardIssue` | string | Clé du ticket sortant |
+| `linkType` | string | Type de lien entre tickets |
+| `linkId` | string | ID du lien créé |
+
+### `jira_delete_issue_link`
+
+Supprimer un lien entre deux tickets Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `domain` | string | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `linkId` | string | Oui | ID du lien de ticket à supprimer |
+| `cloudId` | string | Non | ID Jira Cloud pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `linkId` | string | ID du lien supprimé |
+
+### `jira_add_watcher`
+
+Ajouter un observateur à un ticket Jira pour recevoir des notifications sur les mises à jour
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `domain` | string | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | string | Oui | Clé du ticket Jira auquel ajouter un observateur \(ex. : PROJ-123\) |
+| `accountId` | string | Oui | ID de compte de l'utilisateur à ajouter comme observateur |
+| `cloudId` | string | Non | ID Jira Cloud pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `issueKey` | string | Clé du ticket |
+| `watcherAccountId` | string | ID du compte observateur ajouté |
+
+### `jira_remove_watcher`
+
+Supprimer un observateur d'un ticket Jira
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `domain` | string | Oui | Votre domaine Jira \(ex. : votreentreprise.atlassian.net\) |
+| `issueKey` | string | Oui | Clé du ticket Jira duquel supprimer l'observateur \(ex. : PROJ-123\) |
+| `accountId` | string | Oui | ID de compte de l'utilisateur à supprimer comme observateur |
+| `cloudId` | string | Non | ID Jira Cloud pour l'instance. S'il n'est pas fourni, il sera récupéré à l'aide du domaine. |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `ts` | string | Horodatage de l'opération |
+| `issueKey` | string | Clé du ticket |
+| `watcherAccountId` | string | ID du compte observateur supprimé |
+
+## Notes
+
+- Catégorie : `tools`
+- Type : `jira`
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: kalshi.mdx]---
+Location: sim-main/apps/docs/content/docs/fr/tools/kalshi.mdx
+
+```text
+---
+title: Kalshi
+description: Accédez aux marchés prédictifs et tradez sur Kalshi
+---
+
+import { BlockInfoCard } from "@/components/ui/block-info-card"
+
+<BlockInfoCard 
+  type="kalshi"
+  color="#09C285"
+/>
+
+{/* MANUAL-CONTENT-START:intro */}
+[Kalshi](https://kalshi.com) est une bourse réglementée au niveau fédéral où les utilisateurs peuvent négocier directement sur les résultats d'événements futurs — des marchés prédictifs. L'API robuste de Kalshi et l'intégration Sim permettent aux agents et aux flux de travail d'accéder par programmation à tous les aspects de la plateforme, prenant en charge tout, de la recherche et l'analyse jusqu'au trading automatisé et à la surveillance.
+
+Avec l'intégration de Kalshi dans Sim, vous pouvez :
+
+- **Données de marché et d'événement :** rechercher, filtrer et récupérer des données en temps réel et historiques pour les marchés et les événements ; obtenir des détails précis sur le statut du marché, les séries, les regroupements d'événements, et plus encore.
+- **Gestion de compte et de solde :** accéder aux soldes de compte, aux fonds disponibles et surveiller les positions ouvertes en temps réel.
+- **Gestion des ordres et des transactions :** placer de nouveaux ordres, annuler ceux existants, consulter les ordres ouverts, récupérer un carnet d'ordres en direct et accéder aux historiques complets des transactions.
+- **Analyse d'exécution :** récupérer les transactions récentes, les exécutions historiques et les données en chandeliers pour le backtesting ou la recherche sur la structure du marché.
+- **Surveillance :** vérifier le statut à l'échelle de la bourse ou au niveau des séries, recevoir des mises à jour en temps réel sur les changements de marché ou les arrêts de trading, et automatiser les réponses.
+- **Prêt pour l'automatisation :** créer des agents automatisés et des tableaux de bord de bout en bout qui consomment, analysent et négocient sur les probabilités d'événements réels.
+
+En utilisant ces outils et points d'accès unifiés, vous pouvez intégrer de manière transparente les marchés prédictifs de Kalshi, les capacités de trading en direct et les données d'événements approfondies dans vos applications, tableaux de bord et flux de travail alimentés par l'IA — permettant une prise de décision sophistiquée et automatisée liée aux résultats du monde réel.
+{/* MANUAL-CONTENT-END */}
+
+## Instructions d'utilisation
+
+Intégrez les marchés prédictifs Kalshi dans votre flux de travail. Permet d'obtenir les marchés, un marché spécifique, les événements, un événement spécifique, le solde, les positions, les ordres, le carnet d'ordres, les transactions, les chandeliers, les exécutions, les séries, l'état de l'échange, et de placer/annuler/modifier des transactions.
+
+## Outils
+
+### `kalshi_get_markets`
+
+Récupérer une liste de marchés prédictifs de Kalshi avec filtrage optionnel
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `status` | chaîne | Non | Filtrer par statut \(non ouvert, ouvert, fermé, réglé\) |
+| `seriesTicker` | chaîne | Non | Filtrer par code de série |
+| `eventTicker` | chaîne | Non | Filtrer par code d'événement |
+| `limit` | chaîne | Non | Nombre de résultats \(1-1000, par défaut : 100\) |
+| `cursor` | chaîne | Non | Curseur de pagination pour la page suivante |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `markets` | array | Tableau d'objets de marché |
+| `paging` | object | Curseur de pagination pour récupérer plus de résultats |
+
+### `kalshi_get_market`
+
+Récupérer les détails d'un marché prédictif spécifique par code
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `ticker` | chaîne | Oui | Le code du marché \(ex. : "KXBTC-24DEC31"\) |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `market` | object | Objet de marché avec détails |
+
+### `kalshi_get_events`
+
+Récupérer une liste d'événements de Kalshi avec filtrage optionnel
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `status` | chaîne | Non | Filtrer par statut \(ouvert, fermé, réglé\) |
+| `seriesTicker` | chaîne | Non | Filtrer par code de série |
+| `withNestedMarkets` | chaîne | Non | Inclure les marchés imbriqués dans la réponse \(vrai/faux\) |
+| `limit` | chaîne | Non | Nombre de résultats \(1-200, par défaut : 200\) |
+| `cursor` | chaîne | Non | Curseur de pagination pour la page suivante |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `events` | array | Tableau d'objets d'événement |
+| `paging` | object | Curseur de pagination pour récupérer plus de résultats |
+
+### `kalshi_get_event`
+
+Récupérer les détails d'un événement spécifique par ticker
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `eventTicker` | string | Oui | Le ticker de l'événement |
+| `withNestedMarkets` | string | Non | Inclure les marchés imbriqués dans la réponse \(true/false\) |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `event` | object | Objet d'événement avec détails |
+
+### `kalshi_get_balance`
+
+Récupérer le solde de votre compte et la valeur de votre portefeuille depuis Kalshi
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `keyId` | string | Oui | Votre ID de clé API Kalshi |
+| `privateKey` | string | Oui | Votre clé privée RSA \(format PEM\) |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `balance` | number | Solde du compte en centimes |
+| `portfolioValue` | number | Valeur du portefeuille en centimes |
+| `balanceDollars` | number | Solde du compte en dollars |
+| `portfolioValueDollars` | number | Valeur du portefeuille en dollars |
+
+### `kalshi_get_positions`
+
+Récupérer vos positions ouvertes depuis Kalshi
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `keyId` | string | Oui | Votre ID de clé API Kalshi |
+| `privateKey` | string | Oui | Votre clé privée RSA \(format PEM\) |
+| `ticker` | string | Non | Filtrer par ticker de marché |
+| `eventTicker` | string | Non | Filtrer par ticker d'événement \(max 10 séparés par des virgules\) |
+| `settlementStatus` | string | Non | Filtrer par statut de règlement \(all, unsettled, settled\). Par défaut : unsettled |
+| `limit` | string | Non | Nombre de résultats \(1-1000, par défaut : 100\) |
+| `cursor` | string | Non | Curseur de pagination pour la page suivante |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `positions` | array | Tableau d'objets de position |
+| `paging` | object | Curseur de pagination pour récupérer plus de résultats |
+
+### `kalshi_get_orders`
+
+Récupérez vos ordres depuis Kalshi avec filtrage optionnel
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `keyId` | string | Oui | Votre ID de clé API Kalshi |
+| `privateKey` | string | Oui | Votre clé privée RSA \(format PEM\) |
+| `ticker` | string | Non | Filtrer par ticker de marché |
+| `eventTicker` | string | Non | Filtrer par ticker d'événement \(max 10 séparés par des virgules\) |
+| `status` | string | Non | Filtrer par statut \(en attente, annulé, exécuté\) |
+| `limit` | string | Non | Nombre de résultats \(1-200, par défaut : 100\) |
+| `cursor` | string | Non | Curseur de pagination pour la page suivante |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `orders` | array | Tableau d'objets d'ordre |
+| `paging` | object | Curseur de pagination pour récupérer plus de résultats |
+
+### `kalshi_get_order`
+
+Récupérer les détails d'un ordre spécifique par ID depuis Kalshi
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `keyId` | string | Oui | Votre ID de clé API Kalshi |
+| `privateKey` | string | Oui | Votre clé privée RSA \(format PEM\) |
+| `orderId` | string | Oui | L'ID de l'ordre à récupérer |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `order` | object | Objet d'ordre avec détails |
+
+### `kalshi_get_orderbook`
+
+Récupérer le carnet d'ordres (offres oui et non) pour un marché spécifique
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `ticker` | string | Oui | Ticker du marché \(ex. : KXBTC-24DEC31\) |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `orderbook` | objet | Carnet d'ordres avec offres et demandes oui/non |
+
+### `kalshi_get_trades`
+
+Récupérer les transactions récentes sur tous les marchés
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `limit` | string | Non | Nombre de résultats \(1-1000, par défaut : 100\) |
+| `cursor` | string | Non | Curseur de pagination pour la page suivante |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `trades` | tableau | Tableau d'objets de transactions |
+| `paging` | objet | Curseur de pagination pour récupérer plus de résultats |
+
+### `kalshi_get_candlesticks`
+
+Récupérer les données de chandeliers OHLC pour un marché spécifique
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `seriesTicker` | string | Oui | Ticker de série |
+| `ticker` | string | Oui | Ticker du marché \(ex. : KXBTC-24DEC31\) |
+| `startTs` | number | Oui | Horodatage de début \(secondes Unix\) |
+| `endTs` | number | Oui | Horodatage de fin \(secondes Unix\) |
+| `periodInterval` | number | Oui | Intervalle de période : 1 \(1min\), 60 \(1heure\), ou 1440 \(1jour\) |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `candlesticks` | tableau | Tableau de données de chandeliers OHLC |
+
+### `kalshi_get_fills`
+
+Récupérer votre portefeuille
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `keyId` | string | Oui | Votre ID de clé API Kalshi |
+| `privateKey` | string | Oui | Votre clé privée RSA \(format PEM\) |
+| `ticker` | string | Non | Filtrer par ticker de marché |
+| `orderId` | string | Non | Filtrer par ID d'ordre |
+| `minTs` | number | Non | Horodatage minimum \(millisecondes Unix\) |
+| `maxTs` | number | Non | Horodatage maximum \(millisecondes Unix\) |
+| `limit` | string | Non | Nombre de résultats \(1-1000, par défaut : 100\) |
+| `cursor` | string | Non | Curseur de pagination pour la page suivante |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `fills` | tableau | Tableau d'objets d'exécutions/transactions |
+| `paging` | objet | Curseur de pagination pour récupérer plus de résultats |
+
+### `kalshi_get_series_by_ticker`
+
+Récupérer les détails d'une série de marché spécifique par ticker
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `seriesTicker` | string | Oui | Ticker de la série |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `series` | objet | Objet de série avec détails |
+
+### `kalshi_get_exchange_status`
+
+Récupérer le statut actuel de la plateforme d'échange Kalshi (activité de trading et d'échange)
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `status` | objet | Statut de l'échange avec indicateurs trading_active et exchange_active |
+
+### `kalshi_create_order`
+
+Créer un nouvel ordre sur un marché de prédiction Kalshi
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `keyId` | string | Oui | Votre ID de clé API Kalshi |
+| `privateKey` | string | Oui | Votre clé privée RSA \(format PEM\) |
+| `ticker` | string | Oui | Ticker du marché \(ex., KXBTC-24DEC31\) |
+| `side` | string | Oui | Côté de l'ordre : 'yes' ou 'no' |
+| `action` | string | Oui | Type d'action : 'buy' ou 'sell' |
+| `count` | string | Oui | Nombre de contrats \(minimum 1\) |
+| `type` | string | Non | Type d'ordre : 'limit' ou 'market' \(par défaut : limit\) |
+| `yesPrice` | string | Non | Prix du 'yes' en centimes \(1-99\) |
+| `noPrice` | string | Non | Prix du 'no' en centimes \(1-99\) |
+| `yesPriceDollars` | string | Non | Prix du 'yes' en dollars \(ex., "0.56"\) |
+| `noPriceDollars` | string | Non | Prix du 'no' en dollars \(ex., "0.56"\) |
+| `clientOrderId` | string | Non | Identifiant personnalisé de l'ordre |
+| `expirationTs` | string | Non | Horodatage Unix pour l'expiration de l'ordre |
+| `timeInForce` | string | Non | Durée de validité : 'fill_or_kill', 'good_till_canceled', 'immediate_or_cancel' |
+| `buyMaxCost` | string | Non | Coût maximum en centimes \(active automatiquement fill_or_kill\) |
+| `postOnly` | string | Non | Définir à 'true' pour les ordres maker uniquement |
+| `reduceOnly` | string | Non | Définir à 'true' pour la réduction de position uniquement |
+| `selfTradePreventionType` | string | Non | Prévention d'auto-négociation : 'taker_at_cross' ou 'maker' |
+| `orderGroupId` | string | Non | ID de groupe d'ordres associé |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `order` | objet | L'objet de l'ordre créé |
+
+### `kalshi_cancel_order`
+
+Annuler un ordre existant sur Kalshi
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `keyId` | string | Oui | Votre ID de clé API Kalshi |
+| `privateKey` | string | Oui | Votre clé privée RSA \(format PEM\) |
+| `orderId` | string | Oui | L'ID de l'ordre à annuler |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `order` | objet | L'objet de l'ordre annulé |
+| `reducedBy` | nombre | Nombre de contrats annulés |
+
+### `kalshi_amend_order`
+
+Modifier le prix ou la quantité d'un ordre existant sur Kalshi
+
+#### Entrée
+
+| Paramètre | Type | Obligatoire | Description |
+| --------- | ---- | -------- | ----------- |
+| `keyId` | string | Oui | Votre ID de clé API Kalshi |
+| `privateKey` | string | Oui | Votre clé privée RSA \(format PEM\) |
+| `orderId` | string | Oui | L'ID de l'ordre à modifier |
+| `ticker` | string | Oui | Ticker du marché |
+| `side` | string | Oui | Côté de l'ordre : 'yes' ou 'no' |
+| `action` | string | Oui | Type d'action : 'buy' ou 'sell' |
+| `clientOrderId` | string | Oui | L'ID d'ordre original spécifié par le client |
+| `updatedClientOrderId` | string | Oui | Le nouvel ID d'ordre spécifié par le client après modification |
+| `count` | string | Non | Quantité mise à jour pour l'ordre |
+| `yesPrice` | string | Non | Prix 'yes' mis à jour en centimes \(1-99\) |
+| `noPrice` | string | Non | Prix 'no' mis à jour en centimes \(1-99\) |
+| `yesPriceDollars` | string | Non | Prix 'yes' mis à jour en dollars \(ex. : "0.56"\) |
+| `noPriceDollars` | string | Non | Prix 'no' mis à jour en dollars \(ex. : "0.56"\) |
+
+#### Sortie
+
+| Paramètre | Type | Description |
+| --------- | ---- | ----------- |
+| `order` | objet | L'objet de l'ordre modifié |
+
+## Notes
+
+- Catégorie : `tools`
+- Type : `kalshi`
+```
+
+--------------------------------------------------------------------------------
+
+````

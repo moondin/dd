@@ -1,0 +1,13 @@
+---
+source_txt: user_created_projects/drawio-desktop-dev
+converted_utc: 2025-12-18T18:21:00Z
+parts: 3
+---
+
+# FULLSTACK CODE DATABASE USER CREATED drawio-desktop-dev
+
+## Parts
+
+- FULLSTACK_CODE_DATABASE_USER_CREATED_DRAWIO_DESKTOP_DEV.part01.md
+- FULLSTACK_CODE_DATABASE_USER_CREATED_DRAWIO_DESKTOP_DEV.part02.md
+- FULLSTACK_CODE_DATABASE_USER_CREATED_DRAWIO_DESKTOP_DEV.part03.md

@@ -1,0 +1,849 @@
+---
+source_txt: fullstack_samples/payload-main
+converted_utc: 2025-12-18T13:05:13Z
+part: 533
+parts_total: 695
+---
+
+# FULLSTACK CODE DATABASE SAMPLES payload-main
+
+## Verbatim Content (Part 533 of 695)
+
+````text
+================================================================================
+FULLSTACK SAMPLES CODE DATABASE (VERBATIM) - payload-main
+================================================================================
+Generated: December 18, 2025
+Source: fullstack_samples/payload-main
+================================================================================
+
+NOTES:
+- This output is verbatim because the source is user-owned.
+- Large/binary files may be skipped by size/binary detection limits.
+
+================================================================================
+
+---[FILE: shared.ts]---
+Location: payload-main/test/bulk-edit/shared.ts
+
+```typescript
+export const postsSlug = 'posts'
+
+export const tabsSlug = 'tabs'
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: tsconfig.eslint.json]---
+Location: payload-main/test/bulk-edit/tsconfig.eslint.json
+
+```json
+{
+  // extend your base config to share compilerOptions, etc
+  //"extends": "./tsconfig.json",
+  "compilerOptions": {
+    // ensure that nobody can accidentally use this config for a build
+    "noEmit": true
+  },
+  "include": [
+    // whatever paths you intend to lint
+    "./**/*.ts",
+    "./**/*.tsx"
+  ]
+}
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: tsconfig.json]---
+Location: payload-main/test/bulk-edit/tsconfig.json
+
+```json
+{
+  "extends": "../tsconfig.json"
+}
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: types.d.ts]---
+Location: payload-main/test/bulk-edit/types.d.ts
+
+```typescript
+import type { RequestContext as OriginalRequestContext } from 'payload'
+
+declare module 'payload' {
+  // Create a new interface that merges your additional fields with the original one
+  export interface RequestContext extends OriginalRequestContext {
+    myObject?: string
+    // ...
+  }
+}
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: index.ts]---
+Location: payload-main/test/bulk-edit/collections/Posts/index.ts
+
+```typescript
+import type { CollectionConfig } from 'payload'
+
+import { postsSlug } from '../../shared.js'
+
+export const PostsCollection: CollectionConfig = {
+  slug: postsSlug,
+  versions: {
+    drafts: true,
+  },
+  admin: {
+    useAsTitle: 'title',
+    defaultColumns: ['id', 'title', 'description', '_status'],
+    pagination: {
+      defaultLimit: 5,
+      limits: [5, 10, 15],
+    },
+  },
+  fields: [
+    {
+      name: 'title',
+      type: 'text',
+    },
+    {
+      name: 'description',
+      type: 'textarea',
+    },
+    {
+      name: 'defaultValueField',
+      type: 'text',
+      defaultValue: 'This is a default value',
+    },
+    {
+      name: 'group',
+      type: 'group',
+      fields: [
+        {
+          name: 'defaultValueField',
+          type: 'text',
+          defaultValue: 'This is a default value',
+        },
+        {
+          name: 'title',
+          type: 'text',
+        },
+      ],
+    },
+    {
+      name: 'array',
+      type: 'array',
+      admin: {
+        initCollapsed: true,
+      },
+      fields: [
+        {
+          name: 'optional',
+          type: 'text',
+        },
+        {
+          name: 'innerArrayOfFields',
+          type: 'array',
+          fields: [
+            {
+              name: 'innerOptional',
+              type: 'text',
+            },
+          ],
+        },
+        {
+          name: 'noRead',
+          type: 'text',
+          access: {
+            read: () => false,
+          },
+        },
+        {
+          name: 'noUpdate',
+          type: 'text',
+          access: {
+            update: () => false,
+          },
+        },
+      ],
+    },
+    {
+      name: 'blocks',
+      type: 'blocks',
+      blocks: [
+        {
+          slug: 'textBlock',
+          fields: [
+            {
+              name: 'textFieldForBlock',
+              type: 'text',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'noRead',
+      type: 'text',
+      access: {
+        read: () => false,
+      },
+    },
+    {
+      name: 'noUpdate',
+      type: 'text',
+      access: {
+        update: () => false,
+      },
+    },
+  ],
+}
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: index.ts]---
+Location: payload-main/test/bulk-edit/collections/Tabs/index.ts
+
+```typescript
+import type { CollectionConfig } from 'payload'
+
+import { tabsSlug } from '../../shared.js'
+
+export const TabsCollection: CollectionConfig = {
+  slug: tabsSlug,
+  admin: {
+    useAsTitle: 'title',
+  },
+  fields: [
+    {
+      type: 'text',
+      name: 'title',
+    },
+    {
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Tabs Tabs Array',
+          fields: [
+            {
+              type: 'tabs',
+              tabs: [
+                {
+                  name: 'tabTab',
+                  fields: [
+                    {
+                      name: 'tabTabArray',
+                      type: 'array',
+                      fields: [
+                        {
+                          name: 'tabTabArrayText',
+                          type: 'text',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: config.ts]---
+Location: payload-main/test/collections-graphql/config.ts
+
+```typescript
+import { fileURLToPath } from 'node:url'
+import path from 'path'
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
+import type { CollectionConfig } from 'payload'
+
+import { buildConfigWithDefaults } from '../buildConfigWithDefaults.js'
+import { devUser } from '../credentials.js'
+
+export interface Relation {
+  id: string
+  name: string
+}
+
+const openAccess = {
+  create: () => true,
+  delete: () => true,
+  read: () => true,
+  update: () => true,
+}
+
+const collectionWithName = (
+  collectionSlug: string,
+  extra: Partial<CollectionConfig> = {},
+): CollectionConfig => {
+  return {
+    slug: collectionSlug,
+    access: openAccess,
+    fields: [
+      {
+        name: 'name',
+        type: 'text',
+      },
+    ],
+    ...extra,
+  }
+}
+
+export const slug = 'posts'
+export const relationSlug = 'relation'
+
+export const pointSlug = 'point'
+
+export const errorOnHookSlug = 'error-on-hooks'
+
+export default buildConfigWithDefaults({
+  admin: {
+    importMap: {
+      baseDir: path.resolve(dirname),
+    },
+  },
+  collections: [
+    {
+      slug: 'users',
+      access: openAccess,
+      auth: true,
+      fields: [],
+    },
+    {
+      slug: pointSlug,
+      access: openAccess,
+      fields: [
+        {
+          name: 'point',
+          type: 'point',
+        },
+      ],
+    },
+    {
+      slug,
+      access: openAccess,
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+        },
+        {
+          name: 'description',
+          type: 'text',
+        },
+        {
+          name: 'number',
+          type: 'number',
+        },
+        {
+          name: 'min',
+          type: 'number',
+          min: 10,
+        },
+        // Relationship
+        {
+          name: 'relationField',
+          type: 'relationship',
+          relationTo: relationSlug,
+        },
+        {
+          name: 'relationToCustomID',
+          type: 'relationship',
+          relationTo: 'custom-ids',
+        },
+        // Relation hasMany
+        {
+          name: 'relationHasManyField',
+          type: 'relationship',
+          hasMany: true,
+          relationTo: relationSlug,
+        },
+        // Relation multiple relationTo
+        {
+          name: 'relationMultiRelationTo',
+          type: 'relationship',
+          relationTo: [relationSlug, 'dummy'],
+        },
+        // Relation multiple relationTo hasMany
+        {
+          name: 'relationMultiRelationToHasMany',
+          type: 'relationship',
+          hasMany: true,
+          relationTo: [relationSlug, 'dummy'],
+        },
+        {
+          name: 'A1',
+          type: 'group',
+          fields: [
+            {
+              name: 'A2',
+              type: 'text',
+              defaultValue: 'textInRowInGroup',
+            },
+          ],
+        },
+        {
+          name: 'B1',
+          type: 'group',
+          fields: [
+            {
+              type: 'collapsible',
+              fields: [
+                {
+                  name: 'B2',
+                  type: 'text',
+                  defaultValue: 'textInRowInGroup',
+                },
+              ],
+              label: 'Collapsible',
+            },
+          ],
+        },
+        {
+          name: 'C1',
+          type: 'group',
+          fields: [
+            {
+              name: 'C2Text',
+              type: 'text',
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  type: 'collapsible',
+                  fields: [
+                    {
+                      name: 'C2',
+                      type: 'group',
+                      fields: [
+                        {
+                          type: 'row',
+                          fields: [
+                            {
+                              type: 'collapsible',
+                              fields: [
+                                {
+                                  name: 'C3',
+                                  type: 'text',
+                                },
+                              ],
+                              label: 'Collapsible2',
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                  label: 'Collapsible2',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'tabs',
+          tabs: [
+            {
+              name: 'D1',
+              fields: [
+                {
+                  name: 'D2',
+                  type: 'group',
+                  fields: [
+                    {
+                      type: 'row',
+                      fields: [
+                        {
+                          type: 'collapsible',
+                          fields: [
+                            {
+                              type: 'tabs',
+                              tabs: [
+                                {
+                                  fields: [
+                                    {
+                                      name: 'D3',
+                                      type: 'group',
+                                      fields: [
+                                        {
+                                          type: 'row',
+                                          fields: [
+                                            {
+                                              type: 'collapsible',
+                                              fields: [
+                                                {
+                                                  name: 'D4',
+                                                  type: 'text',
+                                                },
+                                              ],
+                                              label: 'Collapsible2',
+                                            },
+                                          ],
+                                        },
+                                      ],
+                                    },
+                                  ],
+                                  label: 'Tab1',
+                                },
+                              ],
+                            },
+                          ],
+                          label: 'Collapsible2',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+              label: 'Tab1',
+            },
+          ],
+        },
+      ],
+      versions: { drafts: true },
+    },
+    {
+      slug: 'custom-ids',
+      access: {
+        read: () => true,
+      },
+      fields: [
+        {
+          name: 'id',
+          type: 'number',
+        },
+        {
+          name: 'title',
+          type: 'text',
+        },
+      ],
+    },
+    collectionWithName(relationSlug, {
+      access: {
+        ...openAccess,
+        read: () => {
+          return { name: { not_equals: 'restricted' } }
+        },
+      },
+      versions: { drafts: true },
+    }),
+    collectionWithName('dummy'),
+    {
+      ...collectionWithName(errorOnHookSlug),
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+        },
+        {
+          name: 'errorBeforeChange',
+          type: 'checkbox',
+        },
+      ],
+      hooks: {
+        afterDelete: [
+          ({ doc }) => {
+            if (doc?.errorAfterDelete) {
+              throw new Error('Error After Delete Thrown')
+            }
+          },
+        ],
+        beforeChange: [
+          ({ originalDoc }) => {
+            if (originalDoc?.errorBeforeChange) {
+              throw new Error('Error Before Change Thrown')
+            }
+          },
+        ],
+      },
+    },
+    {
+      slug: 'payload-api-test-ones',
+      access: {
+        read: () => true,
+      },
+      fields: [
+        {
+          name: 'payloadAPI',
+          type: 'text',
+          hooks: {
+            afterRead: [({ req }) => req.payloadAPI],
+          },
+        },
+      ],
+    },
+    {
+      slug: 'payload-api-test-twos',
+      access: {
+        read: () => true,
+      },
+      fields: [
+        {
+          name: 'payloadAPI',
+          type: 'text',
+          hooks: {
+            afterRead: [({ req }) => req.payloadAPI],
+          },
+        },
+        {
+          name: 'relation',
+          type: 'relationship',
+          relationTo: 'payload-api-test-ones',
+        },
+      ],
+    },
+    {
+      slug: 'content-type',
+      access: {
+        read: () => true,
+      },
+      fields: [
+        {
+          name: 'contentType',
+          type: 'text',
+          hooks: {
+            afterRead: [({ req }) => req.headers?.get('content-type')],
+          },
+        },
+      ],
+    },
+    {
+      slug: 'cyclical-relationship',
+      access: openAccess,
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          localized: true,
+        },
+        {
+          name: 'relationToSelf',
+          type: 'relationship',
+          relationTo: 'cyclical-relationship',
+        },
+        {
+          name: 'media',
+          type: 'upload',
+          relationTo: 'media',
+        },
+      ],
+      versions: {
+        drafts: true,
+      },
+    },
+    {
+      slug: 'media',
+      access: openAccess,
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+        },
+      ],
+      upload: true,
+    },
+    {
+      slug: 'sort',
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+        },
+        {
+          name: 'number',
+          type: 'number',
+        },
+      ],
+    },
+  ],
+  graphQL: {
+    queries: (GraphQL) => {
+      return {
+        QueryWithInternalError: {
+          type: new GraphQL.GraphQLObjectType({
+            name: 'QueryWithInternalError',
+            fields: {
+              text: {
+                type: GraphQL.GraphQLString,
+              },
+            },
+          }),
+          resolve: () => {
+            // Throwing an internal error with potentially sensitive data
+            throw new Error('Lost connection to the Pentagon. Secret data: ******')
+          },
+        },
+      }
+    },
+  },
+  localization: {
+    defaultLocale: 'en',
+    locales: ['en', 'es'],
+  },
+  onInit: async (payload) => {
+    await payload.create({
+      collection: 'users',
+      data: {
+        email: devUser.email,
+        password: devUser.password,
+      },
+    })
+
+    await payload.create({
+      collection: 'custom-ids',
+      data: {
+        id: 1,
+        title: 'hello',
+      },
+    })
+
+    await payload.create({
+      collection: slug,
+      data: {
+        relationToCustomID: 1,
+        title: 'has custom ID relation',
+      },
+    })
+
+    await payload.create({
+      collection: slug,
+      data: {
+        title: 'post1',
+      },
+    })
+
+    await payload.create({
+      collection: slug,
+      data: {
+        title: 'post2',
+      },
+    })
+
+    await payload.create({
+      collection: slug,
+      data: {
+        description: 'description',
+        title: 'with-description',
+      },
+    })
+
+    await payload.create({
+      collection: slug,
+      data: {
+        number: 1,
+        title: 'numPost1',
+      },
+    })
+    await payload.create({
+      collection: slug,
+      data: {
+        number: 2,
+        title: 'numPost2',
+      },
+    })
+
+    const rel1 = await payload.create({
+      collection: relationSlug,
+      data: {
+        name: 'name',
+      },
+    })
+    const rel2 = await payload.create({
+      collection: relationSlug,
+      data: {
+        name: 'name2',
+      },
+    })
+
+    // Relation - hasMany
+    await payload.create({
+      collection: slug,
+      data: {
+        relationHasManyField: rel1.id,
+        title: 'rel to hasMany',
+      },
+    })
+    await payload.create({
+      collection: slug,
+      data: {
+        relationHasManyField: rel2.id,
+        title: 'rel to hasMany 2',
+      },
+    })
+
+    // Relation - relationTo multi
+    await payload.create({
+      collection: slug,
+      data: {
+        relationMultiRelationTo: {
+          relationTo: relationSlug,
+          value: rel2.id,
+        },
+        title: 'rel to multi',
+      },
+    })
+
+    // Relation - relationTo multi hasMany
+    await payload.create({
+      collection: slug,
+      data: {
+        relationMultiRelationToHasMany: [
+          {
+            relationTo: relationSlug,
+            value: rel1.id,
+          },
+          {
+            relationTo: relationSlug,
+            value: rel2.id,
+          },
+        ],
+        title: 'rel to multi hasMany',
+      },
+    })
+
+    const payloadAPITest1 = await payload.create({
+      collection: 'payload-api-test-ones',
+      data: {},
+    })
+
+    const t = await payload.create({
+      collection: 'payload-api-test-twos',
+      data: {
+        relation: payloadAPITest1.id,
+      },
+    })
+
+    await payload.create({
+      collection: pointSlug,
+      data: {
+        point: [10, 20],
+      },
+    })
+
+    await payload.create({
+      collection: 'content-type',
+      data: {},
+    })
+  },
+  typescript: {
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
+  },
+})
+```
+
+--------------------------------------------------------------------------------
+
+````

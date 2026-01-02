@@ -1,0 +1,1041 @@
+---
+source_txt: fullstack_samples/zulip-main
+converted_utc: 2025-12-18T13:06:15Z
+part: 1125
+parts_total: 1290
+---
+
+# FULLSTACK CODE DATABASE SAMPLES zulip-main
+
+## Verbatim Content (Part 1125 of 1290)
+
+````text
+================================================================================
+FULLSTACK SAMPLES CODE DATABASE (VERBATIM) - zulip-main
+================================================================================
+Generated: December 18, 2025
+Source: fullstack_samples/zulip-main
+================================================================================
+
+NOTES:
+- This output is verbatim because the source is user-owned.
+- Large/binary files may be skipped by size/binary detection limits.
+
+================================================================================
+
+---[FILE: force_push.json]---
+Location: zulip-main/zerver/webhooks/bitbucket2/fixtures/force_push.json
+
+```json
+{
+   "repository":{
+      "links":{
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name"
+         },
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/repository-name"
+         },
+         "avatar":{
+            "href":"https://bitbucket.org/kolaszek/repository-name/avatar/32/"
+         }
+      },
+      "scm":"git",
+      "uuid":"{ede265ff-3649-4068-a7da-81ac581b6f47}",
+      "name":"Repository name",
+      "owner":{
+         "nickname":"Tomasz Kolaszek",
+         "links":{
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            },
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            }
+         },
+         "type":"user",
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "display_name":"Tomasz"
+      },
+      "full_name":"kolaszek/repository-name",
+      "type":"repository",
+      "website":null,
+      "is_private":true
+   },
+   "actor":{
+      "nickname":"Tomasz Kolaszek",
+      "links":{
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+         },
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/"
+         },
+         "avatar":{
+            "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+         }
+      },
+      "type":"user",
+      "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+      "display_name":"Tomasz"
+   },
+   "push":{
+      "changes":[
+         {
+            "links":{
+               "html":{
+                  "href":"https://bitbucket.org/kolaszek/repository-name/branch/master"
+               },
+               "commits":{
+                  "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commits?include=25f93d22b719e2d678a7ad5ee0ef0d1fcdf39c12&exclude=32c4ea19aa3af10acd08e419e2c354941a365d74"
+               }
+            },
+            "forced":true,
+            "new":{
+               "target":{
+                  "author":{
+                     "raw":"Tomasz Kolek <tomasz-kolek@o2.pl>",
+                     "user":{
+                        "nickname":"Tomasz Kolaszek",
+                        "links":{
+                           "self":{
+                              "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+                           },
+                           "html":{
+                              "href":"https://bitbucket.org/kolaszek/"
+                           },
+                           "avatar":{
+                              "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+                           }
+                        },
+                        "type":"user",
+                        "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+                        "display_name":"Tomasz"
+                     }
+                  },
+                  "links":{
+                     "self":{
+                        "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commit/25f93d22b719e2d678a7ad5ee0ef0d1fcdf39c12"
+                     },
+                     "html":{
+                        "href":"https://bitbucket.org/kolaszek/repository-name/commits/25f93d22b719e2d678a7ad5ee0ef0d1fcdf39c12"
+                     }
+                  },
+                  "date":"2016-10-05T19:07:51+00:00",
+                  "message":"c\n",
+                  "hash":"25f93d22b719e2d678a7ad5ee0ef0d1fcdf39c12",
+                  "type":"commit",
+                  "parents":[
+                     {
+                        "hash":"f438e1c1b456b7d9ff278991aaca24123e7a591c",
+                        "links":{
+                           "self":{
+                              "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commit/f438e1c1b456b7d9ff278991aaca24123e7a591c"
+                           },
+                           "html":{
+                              "href":"https://bitbucket.org/kolaszek/repository-name/commits/f438e1c1b456b7d9ff278991aaca24123e7a591c"
+                           }
+                        },
+                        "type":"commit"
+                     }
+                  ]
+               },
+               "repository":{
+                  "full_name":"kolaszek/repository-name",
+                  "links":{
+                     "self":{
+                        "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name"
+                     },
+                     "html":{
+                        "href":"https://bitbucket.org/kolaszek/repository-name"
+                     },
+                     "avatar":{
+                        "href":"https://bitbucket.org/kolaszek/repository-name/avatar/32/"
+                     }
+                  },
+                  "type":"repository",
+                  "uuid":"{ede265ff-3649-4068-a7da-81ac581b6f47}",
+                  "name":"Repository name"
+               },
+               "links":{
+                  "self":{
+                     "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/refs/branches/master"
+                  },
+                  "html":{
+                     "href":"https://bitbucket.org/kolaszek/repository-name/branch/master"
+                  },
+                  "commits":{
+                     "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commits/master"
+                  }
+               },
+               "type":"branch",
+               "name":"master"
+            },
+            "closed":false,
+            "truncated":false,
+            "created":false,
+            "commits":[
+               {
+                  "author":{
+                     "raw":"Tomasz Kolek <tomasz-kolek@o2.pl>",
+                     "user":{
+                        "nickname":"Tomasz Kolaszek",
+                        "links":{
+                           "self":{
+                              "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+                           },
+                           "html":{
+                              "href":"https://bitbucket.org/kolaszek/"
+                           },
+                           "avatar":{
+                              "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+                           }
+                        },
+                        "type":"user",
+                        "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+                        "display_name":"Tomasz"
+                     }
+                  },
+                  "links":{
+                     "self":{
+                        "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commit/25f93d22b719e2d678a7ad5ee0ef0d1fcdf39c12"
+                     },
+                     "html":{
+                        "href":"https://bitbucket.org/kolaszek/repository-name/commits/25f93d22b719e2d678a7ad5ee0ef0d1fcdf39c12"
+                     }
+                  },
+                  "date":"2016-10-05T19:07:51+00:00",
+                  "message":"c\n",
+                  "hash":"25f93d22b719e2d678a7ad5ee0ef0d1fcdf39c12",
+                  "type":"commit",
+                  "parents":[
+                     {
+                        "hash":"f438e1c1b456b7d9ff278991aaca24123e7a591c",
+                        "links":{
+                           "self":{
+                              "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commit/f438e1c1b456b7d9ff278991aaca24123e7a591c"
+                           },
+                           "html":{
+                              "href":"https://bitbucket.org/kolaszek/repository-name/commits/f438e1c1b456b7d9ff278991aaca24123e7a591c"
+                           }
+                        },
+                        "type":"commit"
+                     }
+                  ]
+               },
+               {
+                  "author":{
+                     "raw":"Tomasz Kolek <tomasz-kolek@o2.pl>",
+                     "user":{
+                        "nickname":"Tomasz Kolaszek",
+                        "links":{
+                           "self":{
+                              "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+                           },
+                           "html":{
+                              "href":"https://bitbucket.org/kolaszek/"
+                           },
+                           "avatar":{
+                              "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+                           }
+                        },
+                        "type":"user",
+                        "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+                        "display_name":"Tomasz"
+                     }
+                  },
+                  "links":{
+                     "self":{
+                        "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commit/f438e1c1b456b7d9ff278991aaca24123e7a591c"
+                     },
+                     "html":{
+                        "href":"https://bitbucket.org/kolaszek/repository-name/commits/f438e1c1b456b7d9ff278991aaca24123e7a591c"
+                     }
+                  },
+                  "date":"2016-06-30T15:47:37+00:00",
+                  "message":"b\n",
+                  "hash":"f438e1c1b456b7d9ff278991aaca24123e7a591c",
+                  "type":"commit",
+                  "parents":[
+                     {
+                        "hash":"60cc02a3056062e20247a5b72c9e07d751d92e6f",
+                        "links":{
+                           "self":{
+                              "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commit/60cc02a3056062e20247a5b72c9e07d751d92e6f"
+                           },
+                           "html":{
+                              "href":"https://bitbucket.org/kolaszek/repository-name/commits/60cc02a3056062e20247a5b72c9e07d751d92e6f"
+                           }
+                        },
+                        "type":"commit"
+                     }
+                  ]
+               },
+               {
+                  "author":{
+                     "raw":"Tomasz Kolek <tomasz-kolek@o2.pl>",
+                     "user":{
+                        "nickname":"Tomasz Kolaszek",
+                        "links":{
+                           "self":{
+                              "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+                           },
+                           "html":{
+                              "href":"https://bitbucket.org/kolaszek/"
+                           },
+                           "avatar":{
+                              "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+                           }
+                        },
+                        "type":"user",
+                        "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+                        "display_name":"Tomasz"
+                     }
+                  },
+                  "links":{
+                     "self":{
+                        "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commit/60cc02a3056062e20247a5b72c9e07d751d92e6f"
+                     },
+                     "html":{
+                        "href":"https://bitbucket.org/kolaszek/repository-name/commits/60cc02a3056062e20247a5b72c9e07d751d92e6f"
+                     }
+                  },
+                  "date":"2016-06-30T15:46:22+00:00",
+                  "message":"a\n",
+                  "hash":"60cc02a3056062e20247a5b72c9e07d751d92e6f",
+                  "type":"commit",
+                  "parents":[
+                     {
+                        "hash":"84b96adc644a30fd6465b3d196369d880762afed",
+                        "links":{
+                           "self":{
+                              "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commit/84b96adc644a30fd6465b3d196369d880762afed"
+                           },
+                           "html":{
+                              "href":"https://bitbucket.org/kolaszek/repository-name/commits/84b96adc644a30fd6465b3d196369d880762afed"
+                           }
+                        },
+                        "type":"commit"
+                     }
+                  ]
+               },
+               {
+                  "author":{
+                     "raw":"Tomasz Kolek <tomasz-kolek@o2.pl>",
+                     "user":{
+                        "nickname":"Tomasz Kolaszek",
+                        "links":{
+                           "self":{
+                              "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+                           },
+                           "html":{
+                              "href":"https://bitbucket.org/kolaszek/"
+                           },
+                           "avatar":{
+                              "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+                           }
+                        },
+                        "type":"user",
+                        "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+                        "display_name":"Tomasz"
+                     }
+                  },
+                  "links":{
+                     "self":{
+                        "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commit/84b96adc644a30fd6465b3d196369d880762afed"
+                     },
+                     "html":{
+                        "href":"https://bitbucket.org/kolaszek/repository-name/commits/84b96adc644a30fd6465b3d196369d880762afed"
+                     }
+                  },
+                  "date":"2016-06-30T15:32:24+00:00",
+                  "message":"first commit\n",
+                  "hash":"84b96adc644a30fd6465b3d196369d880762afed",
+                  "type":"commit",
+                  "parents":[
+
+                  ]
+               }
+            ],
+            "old":{
+               "target":{
+                  "author":{
+                     "raw":"Tomasz Kolek <tomasz-kolek@o2.pl>",
+                     "user":{
+                        "nickname":"Tomasz Kolaszek",
+                        "links":{
+                           "self":{
+                              "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+                           },
+                           "html":{
+                              "href":"https://bitbucket.org/kolaszek/"
+                           },
+                           "avatar":{
+                              "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+                           }
+                        },
+                        "type":"user",
+                        "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+                        "display_name":"Tomasz"
+                     }
+                  },
+                  "links":{
+                     "self":{
+                        "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commit/32c4ea19aa3af10acd08e419e2c354941a365d74"
+                     },
+                     "html":{
+                        "href":"https://bitbucket.org/kolaszek/repository-name/commits/32c4ea19aa3af10acd08e419e2c354941a365d74"
+                     }
+                  },
+                  "date":"2016-06-30T15:47:51+00:00",
+                  "message":"c\n",
+                  "hash":"32c4ea19aa3af10acd08e419e2c354941a365d74",
+                  "type":"commit",
+                  "parents":[
+                     {
+                        "hash":"f438e1c1b456b7d9ff278991aaca24123e7a591c",
+                        "links":{
+                           "self":{
+                              "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commit/f438e1c1b456b7d9ff278991aaca24123e7a591c"
+                           },
+                           "html":{
+                              "href":"https://bitbucket.org/kolaszek/repository-name/commits/f438e1c1b456b7d9ff278991aaca24123e7a591c"
+                           }
+                        },
+                        "type":"commit"
+                     }
+                  ]
+               },
+               "repository":{
+                  "full_name":"kolaszek/repository-name",
+                  "links":{
+                     "self":{
+                        "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name"
+                     },
+                     "html":{
+                        "href":"https://bitbucket.org/kolaszek/repository-name"
+                     },
+                     "avatar":{
+                        "href":"https://bitbucket.org/kolaszek/repository-name/avatar/32/"
+                     }
+                  },
+                  "type":"repository",
+                  "uuid":"{ede265ff-3649-4068-a7da-81ac581b6f47}",
+                  "name":"Repository name"
+               },
+               "links":{
+                  "self":{
+                     "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/refs/branches/master"
+                  },
+                  "html":{
+                     "href":"https://bitbucket.org/kolaszek/repository-name/branch/master"
+                  },
+                  "commits":{
+                     "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/commits/master"
+                  }
+               },
+               "type":"branch",
+               "name":"master"
+            }
+         }
+      ]
+   }
+}
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: fork.json]---
+Location: zulip-main/zerver/webhooks/bitbucket2/fixtures/fork.json
+
+```json
+{
+   "actor":{
+      "type":"user",
+      "links":{
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/"
+         },
+         "avatar":{
+            "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+         },
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+         }
+      },
+      "nickname":"Tomasz Kolaszek",
+      "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+      "display_name":"Tomasz"
+   },
+   "repository":{
+      "name":"Repository name",
+      "website":"",
+      "type":"repository",
+      "uuid":"{59005838-3978-410b-84fd-8b4ce1b41089}",
+      "scm":"git",
+      "full_name":"kolaszek/repository-name",
+      "is_private":true,
+      "links":{
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/repository-name"
+         },
+         "avatar":{
+            "href":"https://bitbucket.org/kolaszek/repository-name/avatar/32/"
+         },
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name"
+         }
+      },
+      "owner":{
+         "type":"user",
+         "links":{
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            },
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            },
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            }
+         },
+         "nickname":"Tomasz Kolaszek",
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "display_name":"Tomasz"
+      }
+   },
+   "fork":{
+      "full_name":"kolaszek/repository-name2",
+      "name":"Repository name2",
+      "type":"repository",
+      "links":{
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/repository-name2"
+         },
+         "avatar":{
+            "href":"https://bitbucket.org/kolaszek/repository-name2/avatar/32/"
+         },
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name2"
+         }
+      },
+      "uuid":"{ede265ff-3649-4068-a7da-81ac581b6f47}"
+   }
+}
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: issue_commented.json]---
+Location: zulip-main/zerver/webhooks/bitbucket2/fixtures/issue_commented.json
+
+```json
+{
+   "issue":{
+      "links":{
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2"
+         },
+         "watch":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/watch"
+         },
+         "comments":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/comments"
+         },
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/repository-name/issues/2/bug"
+         },
+         "attachments":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/attachments"
+         },
+         "vote":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/vote"
+         }
+      },
+      "updated_on":"2016-07-04T19:16:59.037577+00:00",
+      "kind":"bug",
+      "reporter":{
+         "links":{
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            },
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            }
+         },
+         "display_name":"Tomasz",
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "type":"user",
+         "nickname":"Tomasz Kolaszek"
+      },
+      "version":null,
+      "milestone":null,
+      "component":null,
+      "content":{
+         "raw":"Such a bug more description",
+         "markup":"markdown",
+         "html":"<p>Such a bug more description</p>"
+      },
+      "watches":1,
+      "assignee":{
+         "links":{
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            },
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            }
+         },
+         "display_name":"Tomasz",
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "type":"user",
+         "nickname":"Tomasz Kolaszek"
+      },
+      "priority":"major",
+      "created_on":"2016-07-04T17:36:51.890354+00:00",
+      "id":1,
+      "type":"issue",
+      "title":"Bug",
+      "votes":0,
+      "state":"new",
+      "edited_on":null
+   },
+   "repository":{
+      "links":{
+         "avatar":{
+            "href":"https://bitbucket.org/kolaszek/repository-name/avatar/32/"
+         },
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name"
+         },
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/repository-name"
+         }
+      },
+      "scm":"git",
+      "owner":{
+         "links":{
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            },
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            }
+         },
+         "display_name":"Tomasz",
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "type":"user",
+         "nickname":""
+      },
+      "name":"Repository name",
+      "full_name":"kolaszek/repository-name",
+      "uuid":"{59005838-3978-410b-84fd-8b4ce1b41089}",
+      "is_private":true,
+      "type":"repository",
+      "website":""
+   },
+   "comment":{
+      "links":{
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/comments/28973596"
+         },
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/repository-name/issues/2#comment-28973596"
+         }
+      },
+      "updated_on":null,
+      "id":28973596,
+      "created_on":"2016-07-04T19:16:59.031212+00:00",
+      "user":{
+         "links":{
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            },
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            }
+         },
+         "display_name":"Tomasz",
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "type":"user",
+         "nickname":"Tomasz Kolaszek"
+      },
+      "content":{
+         "raw":"Add comment",
+         "markup":"markdown",
+         "html":"<p>Add comment</p>"
+      },
+      "type":"issue_comment"
+   },
+   "actor":{
+      "links":{
+         "avatar":{
+            "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+         },
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+         },
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/"
+         }
+      },
+      "display_name":"Tomasz",
+      "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+      "type":"user",
+      "nickname":"Tomasz Kolaszek"
+   }
+}
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: issue_created.json]---
+Location: zulip-main/zerver/webhooks/bitbucket2/fixtures/issue_created.json
+
+```json
+{
+   "actor":{
+      "links":{
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+         },
+         "avatar":{
+            "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+         },
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/"
+         }
+      },
+      "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+      "type":"user",
+      "display_name":"Tomasz",
+      "nickname":"Tomasz Kolaszek"
+   },
+   "issue":{
+      "votes":0,
+      "edited_on":null,
+      "kind":"bug",
+      "links":{
+         "vote":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/vote"
+         },
+         "comments":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/comments"
+         },
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2"
+         },
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/repository-name/issues/2/bug"
+         },
+         "watch":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/watch"
+         },
+         "attachments":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/attachments"
+         }
+      },
+      "content":{
+         "raw":"Such a bug",
+         "html":"<p>Such a bug</p>",
+         "markup":"markdown"
+      },
+      "version":null,
+      "component":null,
+      "created_on":"2016-07-04T17:36:51.890354+00:00",
+      "type":"issue",
+      "id":1,
+      "milestone":null,
+      "reporter":{
+         "links":{
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            },
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            }
+         },
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "type":"user",
+         "display_name":"Tomasz",
+         "nickname":"Tomasz Kolaszek"
+      },
+      "priority":"major",
+      "title":"Bug",
+      "watches":1,
+      "updated_on":"2016-07-04T17:36:51.890354+00:00",
+      "assignee":{
+         "links":{
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            },
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            }
+         },
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "type":"user",
+         "display_name":"Tomasz",
+         "nickname":"Tomasz Kolaszek"
+      },
+      "state":"new"
+   },
+   "repository":{
+      "uuid":"{59005838-3978-410b-84fd-8b4ce1b41089}",
+      "scm":"git",
+      "website":"",
+      "links":{
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name"
+         },
+         "avatar":{
+            "href":"https://bitbucket.org/kolaszek/repository-name/avatar/32/"
+         },
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/repository-name"
+         }
+      },
+      "name":"Repository name",
+      "owner":{
+         "links":{
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            },
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            }
+         },
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "type":"user",
+         "display_name":"Tomasz",
+         "nickname":"Tomasz Kolaszek"
+      },
+      "is_private":true,
+      "full_name":"kolaszek/repository-name",
+      "type":"repository"
+   }
+}
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: issue_updated.json]---
+Location: zulip-main/zerver/webhooks/bitbucket2/fixtures/issue_updated.json
+
+```json
+{
+   "actor":{
+      "display_name":"Tomasz",
+      "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+      "links":{
+         "avatar":{
+            "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+         },
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/"
+         },
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+         }
+      },
+      "nickname":"Tomasz Kolaszek",
+      "type":"user"
+   },
+   "comment":{
+      "updated_on":null,
+      "links":{
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/comments/28972394"
+         }
+      },
+      "user":{
+         "display_name":"Tomasz",
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "links":{
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            },
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            }
+         },
+         "nickname":"Tomasz Kolaszek",
+         "type":"user"
+      },
+      "created_on":"2016-07-04T17:38:33.962551+00:00",
+      "type":"issue_comment",
+      "content":{
+         "html":"",
+         "markup":"markdown",
+         "raw":null
+      },
+      "id":28972394
+   },
+   "repository":{
+      "uuid":"{59005838-3978-410b-84fd-8b4ce1b41089}",
+      "links":{
+         "avatar":{
+            "href":"https://bitbucket.org/kolaszek/repository-name/avatar/32/"
+         },
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/repository-name"
+         },
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name"
+         }
+      },
+      "scm":"git",
+      "full_name":"kolaszek/repository-name",
+      "is_private":true,
+      "name":"Repository name",
+      "owner":{
+         "display_name":"Tomasz",
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "links":{
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            },
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            }
+         },
+         "nickname":"Tomasz Kolaszek",
+         "type":"user"
+      },
+      "type":"repository",
+      "website":""
+   },
+   "changes":{
+      "content":{
+         "old":"Such a bug",
+         "new":"Such a bug more description"
+      }
+   },
+   "issue":{
+      "votes":0,
+      "assignee":{
+         "display_name":"Tomasz",
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "links":{
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            },
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            }
+         },
+         "nickname":"Tomasz Kolaszek",
+         "type":"user"
+      },
+      "links":{
+         "html":{
+            "href":"https://bitbucket.org/kolaszek/repository-name/issues/2/bug"
+         },
+         "vote":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/vote"
+         },
+         "comments":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/comments"
+         },
+         "self":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2"
+         },
+         "watch":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/watch"
+         },
+         "attachments":{
+            "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name/issues/2/attachments"
+         }
+      },
+      "updated_on":"2016-07-04T17:38:33.949326+00:00",
+      "created_on":"2016-07-04T17:36:51.890354+00:00",
+      "state":"new",
+      "component":null,
+      "content":{
+         "html":"<p>Such a bug more description</p>",
+         "markup":"markdown",
+         "raw":"Such a bug more description"
+      },
+      "watches":1,
+      "title":"Bug",
+      "edited_on":null,
+      "milestone":null,
+      "priority":"major",
+      "version":null,
+      "repository":{
+         "uuid":"{59005838-3978-410b-84fd-8b4ce1b41089}",
+         "name":"Repository name",
+         "links":{
+            "avatar":{
+               "href":"https://bitbucket.org/kolaszek/repository-name/avatar/32/"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/repository-name"
+            },
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/repositories/kolaszek/repository-name"
+            }
+         },
+         "type":"repository",
+         "full_name":"kolaszek/repository-name"
+      },
+      "kind":"bug",
+      "type":"issue",
+      "id":1,
+      "reporter":{
+         "display_name":"Tomasz",
+         "uuid":"{678ab31f-9f88-4d7a-b343-1bdf9f024917}",
+         "links":{
+            "avatar":{
+               "href":"https://bitbucket.org/account/kolaszek/avatar/32/"
+            },
+            "html":{
+               "href":"https://bitbucket.org/kolaszek/"
+            },
+            "self":{
+               "href":"https://api.bitbucket.org/2.0/users/kolaszek"
+            }
+         },
+         "nickname":"Tomasz Kolaszek",
+         "type":"user"
+      }
+   }
+}
+```
+
+--------------------------------------------------------------------------------
+
+````

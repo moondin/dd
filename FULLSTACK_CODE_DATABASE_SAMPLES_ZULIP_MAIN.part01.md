@@ -1,0 +1,719 @@
+---
+source_txt: fullstack_samples/zulip-main
+converted_utc: 2025-12-18T13:06:12Z
+part: 1
+parts_total: 1290
+---
+
+# FULLSTACK CODE DATABASE SAMPLES zulip-main
+
+## Verbatim Content (Part 1 of 1290)
+
+````text
+================================================================================
+FULLSTACK SAMPLES CODE DATABASE (VERBATIM) - zulip-main
+================================================================================
+Generated: December 18, 2025
+Source: fullstack_samples/zulip-main
+================================================================================
+
+NOTES:
+- This output is verbatim because the source is user-owned.
+- Large/binary files may be skipped by size/binary detection limits.
+
+================================================================================
+
+---[FILE: .codecov.yml]---
+Location: zulip-main/.codecov.yml
+
+```yaml
+comment: off
+
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        # Codecov has the tendency to report a lot of false negatives,
+        # so we basically suppress comments completely.
+        threshold: 50%
+        base: auto
+    patch: off
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: .codespellignore]---
+Location: zulip-main/.codespellignore
+
+```text
+te
+ans
+pullrequest
+ist
+cros
+wit
+nwe
+circularly
+ned
+ba
+ressemble
+ser
+sur
+hel
+fpr
+alls
+nd
+ot
+womens
+vise
+falsy
+ro
+derails
+forin
+uper
+slac
+couldn
+ges
+assertIn
+thirdparty
+asend
+COO
+statics
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: .editorconfig]---
+Location: zulip-main/.editorconfig
+
+```text
+root = true
+
+[*]
+end_of_line = lf
+charset = utf-8
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[[shell]]
+binary_next_line = true
+switch_case_indent = true
+
+[*.{cjs,cts,js,json,mjs,mts,ts}]
+max_line_length = 100
+
+[*.{py,pyi}]
+max_line_length = 110
+
+[*.{md,svg,rb,pp,yaml,yml}]
+indent_size = 2
+
+[package.json]
+indent_size = 2
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: .gitattributes]---
+Location: zulip-main/.gitattributes
+
+```text
+# DIFFS: Noise suppression.
+#
+# Suppress noisy generated files in diffs.
+# (When you actually want to see these diffs, use `git diff -a`.)
+
+# Large test fixtures:
+corporate/tests/stripe_fixtures/*.json -diff
+
+
+# FORMATTING
+
+# Maintain LF (Unix-style) newlines in text files.
+*   text=auto eol=lf
+
+# Make sure various media files never get somehow auto-detected as text
+# and then newline-converted.
+*.gif binary
+*.jpg binary
+*.jpeg binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.png binary
+*.otf binary
+*.tif binary
+*.ogg binary
+*.bson binary
+*.bmp binary
+*.mp3 binary
+*.pdf binary
+
+# Treat SVG files as code for diffing purposes.
+*.svg diff
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: .gitignore]---
+Location: zulip-main/.gitignore
+
+```text
+# Quick format and style primer:
+#
+#  * If a pattern is meant only for a specific location, it should have a
+#    leading slash, like `/staticfiles.json`.
+#    * In principle any non-trailing slash (like `zproject/dev-secrets.conf`)
+#      will do, but this makes a confusing pattern.  Adding a leading slash
+#      is clearer.
+#
+#  * Patterns like `.vscode/` without slashes, or with only a trailing slash,
+#    match in any subdirectory.
+#
+#  * Subdirectories with several internal things to ignore get their own
+#    `.gitignore` files.
+#
+#  * Comments must be on their own line.  (Otherwise they don't work.)
+#
+# See `git help ignore` for details on the format.
+
+## Config files for the dev environment
+/zproject/apns-dev.pem
+/zproject/apns-dev-key.p8
+/zproject/dev-secrets.conf
+/zproject/custom_dev_settings.py
+/tools/conf.ini
+/tools/custom_provision
+/tools/droplets/conf.ini
+
+## Byproducts of setting up and using the dev environment
+*.pyc
+*.tsbuildinfo
+package-lock.json
+
+/.vagrant
+/var
+
+/.dmypy.json
+/.ruff_cache
+/.venv
+
+# Generated i18n data
+/locale/en
+/locale/language_options.json
+/locale/language_name_map.json
+/locale/*/mobile.json
+
+# Static build
+*.mo
+npm-debug.log
+/.pnpm-store
+/node_modules
+/prod-static
+/staticfiles.json
+/webpack-stats-production.json
+zulip-git-version
+
+# Test / analysis tools
+.coverage
+
+## Files (or really symlinks) created in a prod deployment
+/zproject/prod_settings.py
+
+## Files left by various editors and local environments
+# (Ideally these should be in everyone's respective personal gitignore files.)
+*~
+*.sw[po]
+.idea
+.kdev4
+zulip.kdev4
+.kateproject.d/
+.kateproject
+*.kate-swp
+*.sublime-project
+*.sublime-workspace
+*.DS_Store
+# VS Code. Avoid checking in .vscode in general, while still specifying
+# recommended extensions for working with this repository.
+/.vscode/**/*
+!/.vscode/extensions.json
+# .cache/ is generated by VS Code test runner
+.cache/
+.eslintcache
+
+# Core dump files
+core
+
+# Static generated files for landing page.
+/static/images/landing-page/hello/generated
+
+## Miscellaneous
+# (Ideally this section is empty.)
+.transifexrc
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: .gitlint]---
+Location: zulip-main/.gitlint
+
+```text
+[general]
+ignore=title-trailing-punctuation, body-min-length, body-is-missing
+
+extra-path=tools/lib/gitlint_rules.py
+
+[title-match-regex]
+regex=^(.+:\ )?[A-Z].+\.$
+
+[title-max-length]
+line-length=72
+
+[body-max-line-length]
+line-length=76
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: .mailmap]---
+Location: zulip-main/.mailmap
+
+```text
+# This file teaches `git log` and friends the canonical names
+# and email addresses to use for our contributors.
+#
+# For details on the format, see:
+#   https://git.github.io/htmldocs/gitmailmap.html
+#
+# Handy commands for examining or adding to this file:
+#
+#     # shows all names/emails after mapping, sorted:
+#   $ git shortlog -es | sort -k2
+#
+#     # shows raw names/emails, filtered by mapped name:
+#   $ git log --format='%an %ae' --author=$NAME | uniq -c
+
+acrefoot <acrefoot@zulip.com> <acrefoot@alum.mit.edu>
+acrefoot <acrefoot@zulip.com> <acrefoot@dropbox.com>
+acrefoot <acrefoot@zulip.com> <acrefoot@humbughq.com>
+Adam Benesh <Adam.Benesh@gmail.com>
+Adam Benesh <Adam.Benesh@gmail.com> <Adam-Daniel.Benesh@t-systems.com>
+Adarsh Tiwari <xoldyckk@gmail.com>
+Aditya Chaudhary <aditya.chaudhary1558@gmail.com>
+Adnan Shabbir Husain <generaladnan139@gmail.com>
+Adnan Shabbir Husain <generaladnan139@gmail.com> <78212328+adnan-td@users.noreply.github.com>
+Alex Vandiver <alexmv@zulip.com> <alex@chmrr.net>
+Alex Vandiver <alexmv@zulip.com> <github@chmrr.net>
+Allen Rabinovich <allenrabinovich@yahoo.com> <allenr@humbughq.com>
+Allen Rabinovich <allenrabinovich@yahoo.com> <allenr@zulip.com>
+Alya Abbott <alya@zulip.com> <2090066+alya@users.noreply.github.com>
+Alya Abbott <alya@zulip.com> <alyaabbott@elance-odesk.com>
+Aman Agrawal <amanagr@zulip.com>
+Aman Agrawal <amanagr@zulip.com> <f2016561@pilani.bits-pilani.ac.in>
+Aman Vishwakarma <vishwakarmarambhawan572@gmail.com>
+Aman Vishwakarma <vishwakarmarambhawan572@gmail.com> <185982038+whilstsomebody@users.noreply.github.com>
+Aman Vishwakarma <vishwakarmarambhawan572@gmail.com> <whilstsomebody@gmail.com>
+Anders Kaseorg <anders@zulip.com> <anders@zulipchat.com>
+Anders Kaseorg <anders@zulip.com> <andersk@mit.edu>
+aparna-bhatt <aparnabhatt2001@gmail.com> <86338542+aparna-bhatt@users.noreply.github.com>
+Apoorva Pendse <apoorvavpendse@gmail.com>
+Aryan Bhokare <aryan1bhokare@gmail.com>
+Aryan Bhokare <aryan1bhokare@gmail.com> <92683836+aryan-bhokare@users.noreply.github.com>
+Aryan Shridhar <aryanshridhar7@gmail.com>
+Aryan Shridhar <aryanshridhar7@gmail.com> <53977614+aryanshridhar@users.noreply.github.com>
+Ashwat Kumar Singh <ashwat.kumarsingh.met20@itbhu.ac.in>
+Austin Riba <austin@zulip.com> <austin@m51.io>
+Bedo Khaled <bedokhaled66@gmail.com>
+Bedo Khaled <bedokhaled66@gmail.com> <64221784+abdelrahman725@users.noreply.github.com>
+BIKI DAS <bikid475@gmail.com>
+Brijmohan Siyag <brijsiyag@gmail.com>
+Brock Whittaker <whittakerbrock@gmail.com> <bjwhitta@asu.edu>
+Brock Whittaker <whittakerbrock@gmail.com> <brock@zulip.com>
+Brock Whittaker <whittakerbrock@gmail.com> <brock@zulip.org>
+Brock Whittaker <whittakerbrock@gmail.com> <brock@zulipchat.com>
+Brock Whittaker <whittakerbrock@gmail.com> <brock@zulipchat.org>
+Brock Whittaker <whittakerbrock@gmail.com> <brockwhittaker@Brocks-MacBook.local>
+Chris Bobbe <cbobbe@zulip.com> <cbobbe@zulipchat.com>
+Chris Bobbe <cbobbe@zulip.com> <csbobbe@gmail.com>
+codewithnick <nikhilsingh526452@gmail.com>
+Danny Su <contact@dannysu.com> <opensource@emailengine.org>
+Dhruv Goyal <dhruvgoyal.dev@gmail.com>
+Dinesh <chdinesh1089@gmail.com>
+Dinesh <chdinesh1089@gmail.com> <chdinesh1089>
+Eeshan Garg <eeshan@zulip.com> <jerryguitarist@gmail.com>
+Eric Smith <erwsmith@gmail.com> <99841919+erwsmith@users.noreply.github.com>
+Evy Kassirer <evy@zulip.com>
+Evy Kassirer <evy@zulip.com> <evy.kassirer@gmail.com>
+Evy Kassirer <evy@zulip.com> <evykassirer@users.noreply.github.com>
+Ganesh Pawar <pawarg256@gmail.com> <58626718+ganpa3@users.noreply.github.com>
+Greg Price <greg@zulip.com> <gnprice@gmail.com>
+Greg Price <greg@zulip.com> <greg@zulipchat.com>
+Greg Price <greg@zulip.com> <price@mit.edu>
+Hardik Dharmani <Ddharmani99@gmail.com> <ddharmani99@gmail.com>
+Harsh Bansal <harsh@harshbansal.in>
+Harsh Meena <reharshmeena@gmail.com>
+Harsh Meena <reharshmeena@gmail.com> <116981900+reharsh@users.noreply.github.com>
+Hemant Umre <hemantumre12@gmail.com> <87542880+HemantUmre12@users.noreply.github.com>
+Jai soni <jai_s@me.iitr.ac.in>
+Jai soni <jai_s@me.iitr.ac.in> <76561593+jai2201@users.noreply.github.com>
+Jeff Arnold <jbarnold@gmail.com> <jbarnold@humbughq.com>
+Jeff Arnold <jbarnold@gmail.com> <jbarnold@zulip.com>
+Jessica McKellar <jesstess@mit.edu> <jesstess@humbughq.com>
+Jessica McKellar <jesstess@mit.edu> <jesstess@zulip.com>
+Jitendra Kumar <jk69854@gmail.com>
+Jitendra Kumar <jk69854@gmail.com> <36557466+jitendra-ky@users.noreply.github.com>
+John Lu <JohnLu10212004@gmail.com>
+John Lu <JohnLu10212004@gmail.com> <87673068+JohnLu2004@users.noreply.github.com>
+Joseph Ho <josephho678@gmail.com>
+Joseph Ho <josephho678@gmail.com> <62449508+Joelute@users.noreply.github.com>
+Julia Bichler <julia.bichler@tum.de> <74348920+juliaBichler01@users.noreply.github.com>
+Karl Stolley <karl@zulip.com> <karl@stolley.dev>
+Kartikay Sambher <kartikaysambher@gmail.com>
+Kevin Mehall <km@kevinmehall.net> <kevin@humbughq.com>
+Kevin Mehall <km@kevinmehall.net> <kevin@zulip.com>
+Kevin Scott <kevin.scott.98@gmail.com>
+Kislay Verma <kislayuv27@gmail.com>
+Klara Brrettby <klara.bratteby@gmail.com>
+Klara Brrettby <klara.bratteby@gmail.com> <93648999+klarabratteby@users.noreply.github.com>
+Kumar Aniket <sachinaniket2004@gmail.com>
+Kumar Aniket <sachinaniket2004@gmail.com> <142340063+opmkumar@users.noreply.github.com>
+Kunal Sharma <v.shm.kunal@gmail.com>
+Lalit Kumar Singh <lalitkumarsingh3716@gmail.com>
+Lalit Kumar Singh <lalitkumarsingh3716@gmail.com> <lalits01@smartek21.com>
+Lauryn Menard <lauryn@zulip.com> <63245456+laurynmm@users.noreply.github.com>
+Lauryn Menard <lauryn@zulip.com> <lauryn.menard@gmail.com>
+m-e-l-u-h-a-n <purushottam.tiwari.cd.cse19@itbhu.ac.in>
+m-e-l-u-h-a-n <purushottam.tiwari.cd.cse19@itbhu.ac.in> <pururshottam.tiwari.cd.cse19@itbhu.ac.in>
+Maneesh Shukla <shuklamaneesh24@gmail.com> <143504391+shuklamaneesh23@users.noreply.github.com>
+Mateusz Mandera <mateusz.mandera@zulip.com> <mateusz.mandera@protonmail.com>
+Matt Keller <matt@zulip.com>
+Matt Keller <matt@zulip.com> <m@cognusion.com>
+Nehal Sharma <bablinaneh@gmail.com>
+Nehal Sharma <bablinaneh@gmail.com> <68962290+N-Shar-ma@users.noreply.github.com>
+Nimish Medatwal <medatwalnimish@gmail.com>
+Noble Mittal <noblemittal@outlook.com> <62551163+beingnoble03@users.noreply.github.com>
+nzai <nzaih18@gmail.com> <70953556+nzaih1999@users.noreply.github.com>
+Palash Baderia <palash.baderia@outlook.com>
+Palash Baderia <palash.baderia@outlook.com> <66828942+palashb01@users.noreply.github.com>
+Palash Raghuwanshi <singhpalash0@gmail.com>
+Parth <mittalparth22@gmail.com>
+Prakhar Pratyush <prakhar@zulip.com> <prakhar841301@gmail.com>
+Pratik Chanda <pratikchanda2000@gmail.com>
+Pratik Solanki <pratiksolanki2021@gmail.com>
+Priyam Seth <sethpriyam1@gmail.com> <b19188@students.iitmandi.ac.in>
+Ray Kraesig <rkraesig@zulip.com> <rkraesig@zulipchat.com>
+Reid Barton <rwbarton@gmail.com> <rwbarton@humbughq.com>
+Rein Zustand (rht) <rhtbot@protonmail.com>
+Rishabh Maheshwari <b20063@students.iitmandi.ac.in>
+Rishi Gupta <rishig@zulipchat.com> <rishig+git@mit.edu>
+Rishi Gupta <rishig@zulipchat.com> <rishig@kandralabs.com>
+Rishi Gupta <rishig@zulipchat.com> <rishig@users.noreply.github.com>
+Ritwik Patnaik <ritwikpatnaik@gmail.com>
+Rixant Rokaha <rixantrokaha@gmail.com>
+Rixant Rokaha <rixantrokaha@gmail.com> <rishantrokaha@gmail.com>
+Rixant Rokaha <rixantrokaha@gmail.com> <rrokaha@caldwell.edu>
+Rohan Gudimetla <rohan.gudimetla07@gmail.com>
+Sahil Batra <sahil@zulip.com> <35494118+sahil839@users.noreply.github.com>
+Sahil Batra <sahil@zulip.com> <sahilbatra839@gmail.com>
+Sanchit Sharma <ssharmas10662@gmail.com>
+Satyam Bansal <sbansal1999@gmail.com>
+Sayam Samal <samal.sayam@gmail.com>
+Scott Feeney <scott@oceanbase.org> <scott@humbughq.com>
+Scott Feeney <scott@oceanbase.org> <scott@zulip.com>
+Shashank Singh <21bec103@iiitdmj.ac.in>
+Shlok Patel <shlokcpatel2001@gmail.com>
+Shu Chen <shu@zulip.com>
+Shubham Padia <shubham@zulip.com>
+Shubham Padia <shubham@zulip.com> <shubham-padia@users.noreply.github.com>
+Shubham Padia <shubham@zulip.com> <shubham@glints.com>
+Somesh Ranjan <somesh.ranjan.met20@itbhu.ac.in> <77766761+somesh202@users.noreply.github.com>
+Steve Howell <showell@zulip.com> <showell30@yahoo.com>
+Steve Howell <showell@zulip.com> <showell@yahoo.com>
+Steve Howell <showell@zulip.com> <showell@zulipchat.com>
+Steve Howell <showell@zulip.com> <steve@humbughq.com>
+Steve Howell <showell@zulip.com> <steve@zulip.com>
+strifel <info@strifel.de>
+Sujal Shah <sujalshah28092004@gmail.com>
+Tanmay Kumar <tnmdotkr@gmail.com>
+Tanmay Kumar <tnmdotkr@gmail.com> <133781250+tnmkr@users.noreply.github.com>
+Tim Abbott <tabbott@zulip.com>
+Tim Abbott <tabbott@zulip.com> <tabbott@dropbox.com>
+Tim Abbott <tabbott@zulip.com> <tabbott@humbughq.com>
+Tim Abbott <tabbott@zulip.com> <tabbott@mit.edu>
+Tim Abbott <tabbott@zulip.com> <tabbott@zulipchat.com>
+Tomasz Kolek <tomasz-kolek@o2.pl> <tomasz-kolek@go2.pl>
+Ujjawal Modi <umodi2003@gmail.com> <99073049+Ujjawal3@users.noreply.github.com>
+umkay <ukhan@zulipchat.com> <umaimah.k@gmail.com>
+umkay <ukhan@zulipchat.com> <umkay@users.noreply.github.com>
+Viktor Illmer <1476338+v-ji@users.noreply.github.com>
+Vishesh Singh <vishesh.bhu1971@gmail.com>
+Vishesh Singh <vishesh.bhu1971@gmail.com> <142628839+NotVishesh@users.noreply.github.com>
+Vishnu KS <vishnu@zulip.com> <hackerkid@vishnuks.com>
+Vishnu KS <vishnu@zulip.com> <yo@vishnuks.com>
+Vivek Tripathi <vivektripathi8005@gmail.com>
+Waseem Daher <wdaher@zulip.com> <wdaher@dropbox.com>
+Waseem Daher <wdaher@zulip.com> <wdaher@humbughq.com>
+Yash RE <33805964+YashRE42@users.noreply.github.com>
+Yash RE <33805964+YashRE42@users.noreply.github.com> <YashRE42@github.com>
+Yogesh Sirsat <yogeshsirsat56@gmail.com>
+Yogesh Sirsat <yogeshsirsat56@gmail.com> <41695888+yogesh-sirsat@users.noreply.github.com>
+Zeeshan Equbal <equbalzeeshan@gmail.com>
+Zeeshan Equbal <equbalzeeshan@gmail.com> <54993043+zee-bit@users.noreply.github.com>
+Zev Benjamin <zev@zulip.com> <zev@dropbox.com>
+Zev Benjamin <zev@zulip.com> <zev@humbughq.com>
+Zev Benjamin <zev@zulip.com> <zev@mit.edu>
+Zixuan James Li <p359101898@gmail.com>
+Zixuan James Li <p359101898@gmail.com> <359101898@qq.com>
+Zixuan James Li <p359101898@gmail.com> <39874143+PIG208@users.noreply.github.com>
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: .prettierignore]---
+Location: zulip-main/.prettierignore
+
+```text
+pnpm-lock.yaml
+/api_docs/**/*.md
+/corporate/tests/stripe_fixtures
+/help/**/*.md
+/locale
+/templates/**/*.md
+/tools/setup/emoji/emoji_map.json
+/web/third/*
+!/web/third/marked
+/web/third/marked/*
+!/web/third/marked/lib
+/web/third/marked/lib/*
+!/web/third/marked/lib/marked.d.cts
+/zerver/tests/fixtures
+/zerver/webhooks/*/doc.md
+/zerver/webhooks/github/githubsponsors.md
+/zerver/webhooks/*/fixtures
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: .readthedocs.yaml]---
+Location: zulip-main/.readthedocs.yaml
+
+```yaml
+# https://docs.readthedocs.io/en/stable/config-file/v2.html
+version: 2
+
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.10"
+  jobs:
+    pre_create_environment:
+      - asdf plugin add uv
+      - asdf install uv 0.9.12
+      - asdf global uv 0.9.12
+    create_environment:
+      - UV_PROJECT_ENVIRONMENT=$READTHEDOCS_VIRTUALENV_PATH uv venv
+    install:
+      - UV_PROJECT_ENVIRONMENT=$READTHEDOCS_VIRTUALENV_PATH uv sync --frozen --only-group=docs
+
+sphinx:
+  configuration: docs/conf.py
+  fail_on_warning: true
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: .sonarcloud.properties]---
+Location: zulip-main/.sonarcloud.properties
+
+```text
+sonar.inclusions=**/*.py,**/*.html
+```
+
+--------------------------------------------------------------------------------
+
+---[FILE: CODE_OF_CONDUCT.md]---
+Location: zulip-main/CODE_OF_CONDUCT.md
+
+```text
+# Zulip Code of Conduct
+
+Like the technical community as a whole, the Zulip team and community is
+made up of a mixture of professionals and volunteers from all over the
+world, working on every aspect of the mission, including mentorship,
+teaching, and connecting people.
+
+Diversity is one of our huge strengths, but it can also lead to
+communication issues and unhappiness. To that end, we have a few ground
+rules that we ask people to adhere to. This code applies equally to
+founders, mentors, and those seeking help and guidance.
+
+This isn't an exhaustive list of things that you can't do. Rather, take it
+in the spirit in which it's intended --- a guide to make it easier to enrich
+all of us and the technical communities in which we participate.
+
+## Expected behavior
+
+The following behaviors are expected and requested of all community members:
+
+- Participate. In doing so, you contribute to the health and longevity of
+  the community.
+- Exercise consideration and respect in your speech and actions.
+- Attempt collaboration before conflict. Assume good faith.
+- Refrain from demeaning, discriminatory, or harassing behavior and speech.
+- Take action or alert community leaders if you notice a dangerous
+  situation, someone in distress, or violations of this code, even if they
+  seem inconsequential.
+- Community event venues may be shared with members of the public; be
+  respectful to all patrons of these locations.
+
+## Unacceptable behavior
+
+The following behaviors are considered harassment and are unacceptable
+within the Zulip community:
+
+- Jokes or derogatory language that singles out members of any race,
+  ethnicity, culture, national origin, color, immigration status, social and
+  economic class, educational level, language proficiency, sex, sexual
+  orientation, gender identity and expression, age, size, family status,
+  political belief, religion, and mental and physical ability.
+- Violence, threats of violence, or violent language directed against
+  another person.
+- Disseminating or threatening to disseminate another person's personal
+  information.
+- Personal insults of any sort.
+- Posting or displaying sexually explicit or violent material.
+- Inappropriate photography or recording.
+- Deliberate intimidation, stalking, or following (online or in person).
+- Unwelcome sexual attention. This includes sexualized comments or jokes,
+  inappropriate touching or groping, and unwelcomed sexual advances.
+- Sustained disruption of community events, including talks and
+  presentations.
+- Advocating for, or encouraging, any of the behaviors above.
+
+## Reporting and enforcement
+
+Harassment and other code of conduct violations reduce the value of the
+community for everyone. If someone makes you or anyone else feel unsafe or
+unwelcome, please report it to the community organizers at
+zulip-code-of-conduct@googlegroups.com as soon as possible. You can make a
+report either personally or anonymously.
+
+If a community member engages in unacceptable behavior, the community
+organizers may take any action they deem appropriate, up to and including a
+temporary ban or permanent expulsion from the community without warning (and
+without refund in the case of a paid event).
+
+If someone outside the development community (e.g., a user of the Zulip
+software) engages in unacceptable behavior that affects someone in the
+community, we still want to know. Even if we don't have direct control over
+the violator, the community organizers can still support the people
+affected, reduce the chance of a similar violation in the future, and take
+any direct action we can.
+
+The nature of reporting means it can only help after the fact. If you see
+something you can do while a violation is happening, do it. A lot of the
+harms of harassment and other violations can be mitigated by the victim
+knowing that the other people present are on their side.
+
+All reports will be kept confidential. In some cases, we may determine that a
+public statement will need to be made. In such cases, the identities of all
+victims and reporters will remain confidential unless those individuals
+instruct us otherwise.
+
+## Scope
+
+We expect all community participants (contributors, paid or otherwise,
+sponsors, and other guests) to abide by this Code of Conduct in all
+community venues, online and in-person, as well as in all private
+communications pertaining to community business.
+
+This Code of Conduct and its related procedures also applies to unacceptable
+behavior occurring outside the scope of community activities when such
+behavior has the potential to adversely affect the safety and well-being of
+community members.
+
+## License and attribution
+
+This Code of Conduct is adapted from the
+[Django Code of Conduct](https://www.djangoproject.com/conduct/), and is
+under a
+[Creative Commons BY-SA](https://creativecommons.org/licenses/by-sa/4.0/)
+license.
+
+## Moderating the Zulip community
+
+Anyone can help moderate the Zulip community by helping make sure that folks are
+aware of the [community guidelines](https://zulip.com/development-community/)
+and this Code of Conduct, and that we maintain a positive and respectful
+atmosphere.
+
+Here are some guidelines for how you can help:
+
+- Be friendly! Welcoming folks, thanking them for their feedback, ideas and effort,
+  and just trying to keep the atmosphere warm make the whole community function
+  more smoothly. New participants who feel accepted, listened to and respected
+  are likely to treat others the same way.
+
+- Be familiar with the [community
+  guidelines](https://zulip.com/development-community/), and cite them liberally
+  when a user violates them. Be polite but firm. Some examples:
+
+  - @user please note that there is no need to @-mention @\_**Tim Abbott** when
+    you ask a question. As noted in the [guidelines for this
+    community](https://zulip.com/development-community/):
+
+    > Use @-mentions sparingly… there is generally no need to @-mention a
+    > core contributor unless you need their timely attention.
+
+  - @user, please keep in mind the following [community
+    guideline](https://zulip.com/development-community/):
+
+    > Don’t ask the same question in multiple places. Moderators read every
+    > public stream, and make sure every question gets a reply.
+
+    I’ve gone ahead and moved the other copy of this message to this thread.
+
+  - If asked a question in a direct message that is better discussed in a public
+    stream:
+    > Hi @user! Please start by reviewing
+    > https://zulip.com/development-community/#community-norms to learn how to
+    > get help in this community.
+
+- Users sometimes think chat.zulip.org is a testing instance. When this happens,
+  kindly direct them to use the **#test here** stream.
+
+- If you see a message that’s posted in the wrong place, go ahead and move it if
+  you have permissions to do so, even if you don’t plan to respond to it.
+  Leaving the “Send automated notice to new topic” option enabled helps make it
+  clear what happened to the person who sent the message.
+
+  If you are responding to a message that's been moved, mention the user in your
+  reply, so that the mention serves as a notification of the new location for
+  their conversation.
+
+- If a user is posting spam, please report it to an administrator. They will:
+
+  - Change the user's name to `<name> (spammer)` and deactivate them.
+  - Delete any spam messages they posted in public streams.
+
+- We care very much about maintaining a respectful tone in our community. If you
+  see someone being mean or rude, point out that their tone is inappropriate,
+  and ask them to communicate their perspective in a respectful way in the
+  future. If you don’t feel comfortable doing so yourself, feel free to ask a
+  member of Zulip's core team to take care of the situation.
+
+- Try to assume the best intentions from others (given the range of
+  possibilities presented by their visible behavior), and stick with a friendly
+  and positive tone even when someone’s behavior is poor or disrespectful.
+  Everyone has bad days and stressful situations that can result in them
+  behaving not their best, and while we should be firm about our community
+  rules, we should also enforce them with kindness.
+```
+
+--------------------------------------------------------------------------------
+
+````
